@@ -13,7 +13,7 @@
 #define logf(format, ...) 
 
 #if defined(__i386__) || defined(__x86_64__)
- #include "immintrin.h"
+#include "immintrin.h"
 #endif
 
 typedef float vec4 __attribute__ ((vector_size (sizeof(float) * 4)));
@@ -36,12 +36,12 @@ void diff4(float *x, float *y, int N);
 
 static inline float square(float x)
 {
-  return x * x;
+    return x * x;
 }
- 
+
 static inline float cube(float x)
 {
-  return x * x * x;
+    return x * x * x;
 }
 
 #endif

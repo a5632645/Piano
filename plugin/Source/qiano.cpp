@@ -188,7 +188,7 @@ float PianoNote::go()
       sbloadHT += stringHT[k]->go_string();
 #endif
     }
-    
+
     float in[2] = {sbloadT, sbloadHT};
     float out[2];
     bridge.filter(in, out);
@@ -379,7 +379,7 @@ void Piano::init(float Fs_, int blockSize_)
   setParameter(pLongModes, 0.0);
 }
 
-Piano::Piano (int parameters)
+Piano::Piano()
 {
   _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
@@ -437,24 +437,24 @@ void PianoNote::triggerOn(float velocity, float *tune)
   logf("note = %d velocity =  %g\n",note,velocity);
   Value *v = piano->vals;
   float f0 = 27.5; //A0 note 21
-  float L = .14 + 1.4/(1+exp(-3.4+1.4*log(f/f0)));
-  L = 0.04 + 2.0/(1.0+exp(-3.2+1.4*log(f/f0)));
+  float L = 0.14f + 1.4f / (1 + exp (-3.4f + 1.4f * log (f / f0)));
+  L = 0.04f + 2.0f / (1.0f + exp (-3.2f + 1.4f * log (f / f0)));
   L *= v[pStringLength];
   //L = .115;
-  float p = 2.0+1.0*log(f/f0)/log(4192/f0);
+  float p = 2.0f + 1.0f * log (f / f0) / log (4192 / f0);
   p *= v[pHammerCompliance];
 
 
   //float m = .06 * (1.0 - 0.9*pow((float)log(f/f0)/log(4192/f0),(float)0.1));
   //m=.018 * (1.0 - .7*pow(log(f/f0)/log(4192/f0),0.8));
   float m = .02 * pow(0.5 - log(f/4192),0.3);
-  m = .013 - .005 *log(f/f0)/log(4192/f0);
+  m = 0.013f - 0.005f * log (f / f0) / log (4192 / f0);
   m *= v[pHammerMass];
   //m = .0092;
 
   //float K,p;
   float K = 40/pow((float).7e-3,(float)p);
-  float alpha = 0.1e-4*log(f/f0)/log(4192/f0);
+  float alpha = 0.1e-4 * log (f / f0) / log (4192 / f0);
   //K *= 1.;
 
   int N = note - 20;

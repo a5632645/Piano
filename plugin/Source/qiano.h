@@ -164,16 +164,16 @@ protected:
 class Piano
 {
 public:
-	Piano (int parameters);
+	Piano();
 	~Piano();
 
-	void addVoice(PianoNote *v);	
-	void removeVoice(PianoNote *v);
-	void process(float *out, int samples);	
-	void process(float **in, float **out, int frameSamples, int offset);
-	void process(float **in, float **out, int frameSamples, juce::MidiBuffer&);
-    void init(float Fs, int blockSize);
-    void triggerOn(int note, float velocity, float *tune);
+	void addVoice (PianoNote *v);
+	void removeVoice (PianoNote *v);
+	void process (float *out, int samples);
+	void process (float **in, float **out, int frameSamples, int offset);
+	void process (float **in, float **out, int frameSamples, juce::MidiBuffer&);
+    void init (float Fs, int blockSize);
+    void triggerOn (int note, float velocity, float *tune);
 
 	//vst crap
 	void setParameter (int32_t index, float value);

@@ -85,9 +85,9 @@ class Loss : public Filter
     f0 /= upsample;
     c1 /= upsample;
     c3 *= upsample;
-    float g = 1.0 - c1/f0; 
-    float c = 4.0*c3 + f0;
-    float a1 = (-c+sqrt(c*c-16.0*c3*c3))/(4.0*c3);
+    float g = 1.0f - c1 / f0;
+    float c = 4.0f * c3 + f0;
+    float a1 = (-c + sqrt (c * c - 16.0f * c3 *c3)) / (4.0f * c3);
     b[0] = g*(1+a1);
     b[1] = 0;
     a[0] = -1;
