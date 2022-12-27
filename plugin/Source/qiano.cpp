@@ -4,8 +4,6 @@
 #include "utils.h"
 #include "qiano.h"
 #include <string.h>
-#include "midi.h"
-#include "vst.h"
 #include <xmmintrin.h>
 
 #define HSTRING 1
@@ -21,9 +19,9 @@ int USE_DWGS4 = 1;
 
 //XXX delay clear opt
 
-float TUNE[3][3] = {{1.0, 0.0, 0.0 },
-                    {0.9997, 1.0003, 0.0},
-                    { 1.0001, 1.0003, 0.9996 }};    
+float TUNE[3][3] = {{1.0f, 0.0f, 0.0f },
+                    {0.9997f, 1.0003f, 0.0f},
+                    { 1.0001f, 1.0003f, 0.9996f }};
 
 
 Param params[NumParams] = {
@@ -70,9 +68,9 @@ int getParameterIndex(const char *key) {
   return -1;
 }
 
-double PianoNote :: freqTable[NUM_NOTES];
+double PianoNote::freqTable[NUM_NOTES];
 
-void PianoNote :: fillFrequencyTable() {
+void PianoNote::fillFrequencyTable() {
   double NOTE_UP_SCALAR = pow(2.0,1.0/12.0); 
   double A = 6.875;	// A
   A *= NOTE_UP_SCALAR;	// A#
@@ -85,7 +83,7 @@ void PianoNote :: fillFrequencyTable() {
     }
 }
 
-float PianoNote :: goUp()
+float PianoNote::goUp()
 {
   float out;
   while(upSampleDelayNeeded) {
@@ -96,7 +94,7 @@ float PianoNote :: goUp()
   return goUpDelayed();
 }
 
-float PianoNote :: goUpDelayed()
+float PianoNote::goUpDelayed()
 {
   
   if(tUp == 0) {
@@ -121,7 +119,7 @@ float PianoNote :: goUpDelayed()
   return out;
 }
 
-float PianoNote :: goDown()
+float PianoNote::goDown()
 {
   while(downSampleDelayNeeded) {
     goDownDelayed();
@@ -130,7 +128,7 @@ float PianoNote :: goDown()
   return goDownDelayed();
 }
 
-float PianoNote :: goDownDelayed()
+float PianoNote::goDownDelayed()
 {
   if(tDown == 0) {
     float in[8] __attribute__((aligned(32)));
@@ -162,7 +160,7 @@ float PianoNote :: goDownDelayed()
        and the soundboard output is also the output of the qiano 
     */
 
-float PianoNote :: go()
+float PianoNote::go()
 {
   float output;
   Value *v = piano->vals;
@@ -234,7 +232,7 @@ float PianoNote :: go()
   return output;
 }
 
-vec4 PianoNote :: go4()
+vec4 PianoNote::go4()
 {
   Value *v = piano->vals;
 
@@ -295,7 +293,7 @@ vec4 PianoNote :: go4()
   return output;
 }
 
-void Piano :: addVoice(PianoNote *v) 
+void Piano::addVoice(PianoNote *v)
 { 
   if(voiceList) {
     v->next = voiceList;
@@ -309,7 +307,7 @@ void Piano :: addVoice(PianoNote *v)
   }
 }
 
-void Piano :: removeVoice(PianoNote *v)
+void Piano::removeVoice(PianoNote *v)
 {	
 	if(v == voiceList) {
 		if(v == v->next)
@@ -323,12 +321,12 @@ void Piano :: removeVoice(PianoNote *v)
 	n->prev = p;
 }
 
-void Piano :: init(float Fs_, int blockSize) 
+void Piano::init(float Fs_, int blockSize_)
 {
   this->Fs = Fs_;
-  this->blockSize = blockSize;
+  blockSize = blockSize_;
   voiceList = NULL;
-  PianoNote :: fillFrequencyTable(); 
+  PianoNote::fillFrequencyTable();
   for(int k=PIANO_MIN_NOTE; k<=PIANO_MAX_NOTE;k++) {
 	  if(noteArray[k]) delete noteArray[k];
     noteArray[k] = new PianoNote(k,Fs,this);
@@ -381,30 +379,27 @@ void Piano :: init(float Fs_, int blockSize)
   setParameter(pLongModes, 0.0);
 }
 
-Piano :: Piano(audioMasterCallback audioMaster, int parameters) : VstEffect(audioMaster, parameters){
-  
+Piano::Piano (int parameters)
+{
   _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
 
-  setNumInputs (0);		// stereo in
-  setNumOutputs (2);		// stereo out
-  setUniqueID (8881887);	// identify
-  isSynth(true);
-  for(int k=PIANO_MIN_NOTE; k<=PIANO_MAX_NOTE;k++) {
-    noteArray[k] = NULL;
-  }
-  input = NULL;
-  soundboard = NULL;
+  for(int k=PIANO_MIN_NOTE; k<=PIANO_MAX_NOTE;k++)
+    noteArray[k] = nullptr;
+
+  input = nullptr;
+  soundboard = nullptr;
 }
 
-PianoNote :: PianoNote(int note, int Fs, Piano *piano) {
-  this->Fs = Fs;
-  this->note = note;
-  this->f = freqTable[note];
-  this->piano = piano;
+PianoNote::PianoNote (int note_, int Fs_, Piano* piano_)
+{
+  Fs = Fs_;
+  note = note_;
+  f = freqTable[note];
+  piano = piano_;
 
-  if(note<31)
+  if (note<31)
     nstrings = 1;
-  else if(note<41)
+  else if (note<41)
     nstrings = 2;
   else 
     nstrings = 3;
@@ -412,7 +407,8 @@ PianoNote :: PianoNote(int note, int Fs, Piano *piano) {
   //nstrings = 1;
   nstringsi = 1.0/(float)nstrings;
   
-  for(int k=0;k<nstrings;k++) {
+  for(int k=0;k<nstrings;k++)
+  {
     stringT[k] = new dwgs();
     stringHT[k] = new dwgs();
   }
@@ -430,13 +426,13 @@ PianoNote :: PianoNote(int note, int Fs, Piano *piano) {
   bActive = false;
 }
 
-bool PianoNote :: isDone()
+bool PianoNote::isDone()
 {
   //return false;
 	return (energy<1e-8*maxEnergy);
 }
 
-void PianoNote :: triggerOn(float velocity, float *tune) 
+void PianoNote::triggerOn(float velocity, float *tune)
 {
   logf("note = %d velocity =  %g\n",note,velocity);
   Value *v = piano->vals;
@@ -636,7 +632,7 @@ void PianoNote :: triggerOn(float velocity, float *tune)
 
 }
 
-void PianoNote :: triggerOff() 
+void PianoNote::triggerOff()
 {
   Value *v = piano->vals;
   float gammaLDamped = v[pLongitudinalGammaDamped];
@@ -647,17 +643,17 @@ void PianoNote :: triggerOff()
 	}
 }
 
-void PianoNote :: deActivate()
+void PianoNote::deActivate()
 {
 	bActive = false;
 }
 
-bool PianoNote :: isActive() 
+bool PianoNote::isActive()
 {
 	return bActive;
 }
 
-PianoNote :: ~PianoNote() {
+PianoNote::~PianoNote() {
  for(int k=0;k<nstrings;k++) {
     delete stringT[k];
     delete stringHT[k];
@@ -665,14 +661,14 @@ PianoNote :: ~PianoNote() {
   delete hammer;
 }
 
-Piano :: ~Piano() { 
+Piano::~Piano() {
   for(int k=PIANO_MIN_NOTE;k<=PIANO_MAX_NOTE;k++)
 	  delete noteArray[k];
   delete input;
   delete soundboard;
 }
 
-void Piano :: process(float *out, int samples) 
+void Piano::process(float *out, int samples)
 {
   for(int i=0;i<samples;i++) {
     PianoNote *v = voiceList;
@@ -694,121 +690,99 @@ void Piano :: process(float *out, int samples)
 #endif
 }
 
-void Piano :: process(float **in, float **out, int samples, int offset) 
+void Piano::process(float **in, float **out, int samples, int offset)
 {
 	process(out[0]+offset,samples);
 	memcpy(out[1]+offset, out[0]+offset, samples * sizeof(float));
 }
 
-void Piano :: process(float **inS, float **outS, int sampleFrames) 
+void Piano::process (float** inS, float** outS, int sampleFrames, juce::MidiBuffer& midi)
 { 
-  int delta = 0;
-  BlockEvents end;
-  end.delta = sampleFrames;
-  end.eventStatus = isNull;
-  blockEvents[numBlockEvents++] = end;    
- 
+    int delta = 0;
 
-  PianoNote *v = voiceList;
-  PianoNote *remove[NUM_NOTES];
-  int k=0;
-  int n=0;
-  do {
-	  if(v && v->isDone()) {
-		  v->deActivate();	    
-		  remove[k++] = v;
-	  }	 
-  } while(v && (v=v->next) && (v!=voiceList));  
-  for(int j=0;j<k;j++)
-    removeVoice(remove[j]);
+    PianoNote* v = voiceList;
+    PianoNote* remove[NUM_NOTES];
 
-  for(int i=0;i<numBlockEvents;i++) {    
-	
-    BlockEvents event = blockEvents[i];
-    int nextDelta = event.delta;
+    int k = 0;
+    int n = 0;
 
-    if(event.byte1>=PIANO_MIN_NOTE && event.byte1<=PIANO_MAX_NOTE) {
-      if(event.eventStatus == isNote) {
-        
-        PianoNote *v = noteArray[event.byte1];		
-        if(event.byte2) {		
-          if(!(noteArray[event.byte1]->isActive())) {
-            addVoice(v);			
-          }
-          float velocity = vals[pMaxVelocity]*pow((float)(event.byte2/127.0),(float)2.0);
-          v->triggerOn(velocity,NULL);
-        } else {	
-          if(v) {
-            v->triggerOff();
-          }
+    do
+    {
+        if (v && v->isDone())
+        {
+            v->deActivate();
+            remove[k++] = v;
         }
-      }
-    }  
+    } while(v && (v=v->next) && (v!=voiceList));
+
+    for (int j = 0; j < k; j++)
+        removeVoice (remove[j]);
+
+    for (auto meta : midi)
+    {
+        auto m = meta.getMessage();
+        int nextDelta = m.getTimeStamp();
+
+        if (! m.isNoteOnOrOff())
+            continue;
+
+        if (m.getNoteNumber() >= PIANO_MIN_NOTE && m.getNoteNumber() <= PIANO_MAX_NOTE)
+        {
+            PianoNote* v = noteArray[m.getNoteNumber()];
+            if (m.isNoteOn())
+            {
+                if (! (noteArray[m.getNoteNumber()]->isActive()))
+                    addVoice(v);
+
+                float velocity = vals[pMaxVelocity] * pow ((float)(m.getVelocity() / 127.0f), 2.0f);
+                v->triggerOn (velocity, nullptr);
+            }
+            else
+            {
+                if (v)
+                    v->triggerOff();
+            }
+        }
     
-    nextDelta = std::min(nextDelta, sampleFrames);
-    process(inS, outS, nextDelta - delta, delta);
-    delta = nextDelta;
-  }  
-  numBlockEvents = 0; 
+        nextDelta = std::min (nextDelta, sampleFrames);
+        process (inS, outS, nextDelta - delta, delta);
+        delta = nextDelta;
+    }
+
+    process (inS, outS, sampleFrames - delta, delta);
 }
 
-void Piano :: triggerOn(int note, float velocity, float *tune)
+void Piano::triggerOn (int note, float velocity, float *tune)
 {
   PianoNote *v = noteArray[note];
   addVoice(v);
   v->triggerOn(velocity,tune);
 }
 
-#include "audioeffectx.h"
-
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
-{
-  return new Piano(audioMaster,NumParams);
-}
-
-void Piano::resume()
-{
-  VstEffect::resume();
-	//wantEvents(1);
-  blockSize = updateBlockSize();
-  Fs = updateSampleRate();
-  init(Fs,blockSize);
-}
-
-
 //-----------------------------------------------------------------------------------------
-void Piano::setParameterLiteral (VstInt32 index, float value) {
-  Value &p = vals[index];
-  p.v = value;
-
-  if(index == pDwgs4) {
-    USE_DWGS4 = lrintf(value);
-  }
-}
-
-void Piano::setParameter (VstInt32 index, float value)
+void Piano::setParameter (int32_t index, float value)
 {
   Value &p = vals[index];
   p.f = value;
 
   switch(index) {
   case pYoungsModulus:
-    p.v = 200 * exp(4.0 * (value - 0.5));
+    p.v = 200 * exp (4.0 * (value - 0.5));
     break;
   case pStringDensity:
-    p.v = 7850 * exp(4.0 * (value - 0.5));
+    p.v = 7850 * exp (4.0 * (value - 0.5));
     break;
   case pHammerMass:
-    p.v = exp(4.0 * (value - 0.5));
+    p.v = exp (4.0 * (value - 0.5));
     break;
   case pStringTension:
-    p.v = 800.0 * exp(3.0 * (value - 0.5));
+    p.v = 800.0 * exp (3.0 * (value - 0.5));
     break;
   case pStringLength:
-    p.v = exp(2.0 * (value - 0.25));
+    p.v = exp (2.0 * (value - 0.25));
     break;
   case pStringRadius:
-    p.v = exp(2.0 * (value - 0.25));
+    p.v = exp (2.0 * (value - 0.25));
     break;
   case pHammerCompliance:
     p.v = 2.0 * value;
@@ -817,16 +791,16 @@ void Piano::setParameter (VstInt32 index, float value)
     p.v = (2.0 * value);
     break;
   case pHammerHysteresis:
-    p.v = exp(4.0 * (value-0.5));
+    p.v = exp (4.0 * (value-0.5));
     break;
   case pBridgeImpedance:
-    p.v = 8000.0 * exp(12.0 * (value - 0.5));
+    p.v = 8000.0 * exp (12.0 * (value - 0.5));
     break;
   case pBridgeHorizontalImpedance:
-    p.v = 60000.0 * exp(12.0 * (value - 0.5));
+    p.v = 60000.0 * exp (12.0 * (value - 0.5));
     break;
   case pVerticalHorizontalImpedance:
-    p.v = 400.0 * exp(12.0 * (value - 0.5));
+    p.v = 400.0 * exp (12.0 * (value - 0.5));
     break;
   case pHammerPosition:
     p.v = .05 + value * 0.15;
@@ -838,19 +812,19 @@ void Piano::setParameter (VstInt32 index, float value)
 #endif
     break;
   case pStringDecay:
-    p.v = 0.25 * exp(6.0 * (value - 0.25));
+    p.v = 0.25 * exp (6.0 * (value - 0.25));
     break;
   case pStringLopass:
-    p.v = 5.85 * exp(6.0 * (value - 0.5));
+    p.v = 5.85 * exp (6.0 * (value - 0.5));
     break;
   case pDampedStringDecay:
-    p.v = 8.0 * exp(6.0 * (value - 0.5));
+    p.v = 8.0 * exp (6.0 * (value - 0.5));
     break;
   case pDampedStringLopass:
-    p.v = 25.0 * exp(6.0 * (value - 0.5));
+    p.v = 25.0 * exp (6.0 * (value - 0.5));
     break;
   case pSoundboardDecay:
-    p.v = 20.0 * exp(4.0 * (value - 0.5));
+    p.v = 20.0 * exp (4.0 * (value - 0.5));
 #ifdef FDN_REVERB
     soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
 #endif
@@ -862,193 +836,54 @@ void Piano::setParameter (VstInt32 index, float value)
 #endif
     break;
   case pLongitudinalGamma:
-    p.v = 1e-2 * exp(10.0 * (value - 0.5));
+    p.v = 1e-2 * exp (10.0 * (value - 0.5));
     break;
   case pLongitudinalGammaQuadratic:
-    p.v = 1.0e-2 * exp(8.0 * (value - 0.5));
+    p.v = 1.0e-2 * exp (8.0 * (value - 0.5));
     break;
   case pLongitudinalGammaDamped:
-    p.v = 5e-2 * exp(10.0 * (value - 0.5));
+    p.v = 5e-2 * exp (10.0 * (value - 0.5));
     break;
   case pLongitudinalGammaQuadraticDamped:
-    p.v = 3.0e-2 * exp(8.0 * (value - 0.5));
+    p.v = 3.0e-2 * exp (8.0 * (value - 0.5));
     break;
   case pLongitudinalMix:
-    p.v = (value==0.0)?0.0:1e0 * exp(16.0 * (value - 0.5));
+    p.v = (value==0.0)?0.0:1e0 * exp (16.0 * (value - 0.5));
     break;
   case pLongitudinalTransverseMix:
-    p.v = (value==0.0)?0.0:1e0 * exp(16.0 * (value - 0.5));
+    p.v = (value==0.0)?0.0:1e0 * exp (16.0 * (value - 0.5));
     break;
   case pVolume:
-    p.v = 5e-3 * exp(8.0 * (value - 0.5));
+    p.v = 5e-3 * exp (8.0 * (value - 0.5));
     break;
   case pMaxVelocity:
-    p.v = 10 * exp(8.0 * (value - 0.5));
+    p.v = 10 * exp (8.0 * (value - 0.5));
     break;
   case pStringDetuning:
-    p.v = 1.0 * exp(10.0 * (value - 0.5));
+    p.v = 1.0 * exp (10.0 * (value - 0.5));
     break;
   case pBridgeMass:
-    p.v = 10.0 * exp(10.0 * (value - 0.5));
+    p.v = 10.0 * exp (10.0 * (value - 0.5));
     break;
   case pBridgeSpring:
-    p.v = 1e5 * exp(20.0 * (value - 0.5));
+    p.v = 1e5 * exp (20.0 * (value - 0.5));
     break;
   case pDwgs4:
     p.v = lrintf(value);
     USE_DWGS4 = lrintf(value);
     break;
   case pDownsample:
-    p.v = 1+lrintf(value);
+    p.v = 1 + lrintf(value);
     break;
   case pLongModes:
-    p.v = 1+lrintf(value);
+    p.v = 1 + lrintf(value);
     break;
   }
 
 }
 
 //-----------------------------------------------------------------------------------------
-float Piano::getParameter (VstInt32 index)
+float Piano::getParameter (int32_t index)
 {
   return vals[index].f;
 }
-
-//-----------------------------------------------------------------------------------------
-void Piano::getParameterName (VstInt32 index, char* label)
-{
-  vst_strncpy (label, params[index].name, kVstMaxParamStrLen);
-}
-
-//-----------------------------------------------------------------------------------------
-void Piano::getParameterDisplay (VstInt32 index, char* text)
-{
-  float2string (vals[index], text, kVstMaxParamStrLen);
-}
-
-//-----------------------------------------------------------------------------------------
-void Piano::getParameterLabel (VstInt32 index, char* label)
-{
-  vst_strncpy (label, params[index].label, kVstMaxParamStrLen);
-}
-
-//------------------------------------------------------------------------
-bool Piano::getEffectName (char* name)
-{
-  vst_strncpy (name, "Qiano", kVstMaxEffectNameLen);
-  return true;
-}
-
-//------------------------------------------------------------------------
-bool Piano::getProductString (char* text)
-{
-  vst_strncpy (text, "Qiano", kVstMaxProductStrLen);
-  return true;
-}
-
-//------------------------------------------------------------------------
-bool Piano::getVendorString (char* text)
-{
-  vst_strncpy (text, "Mune", kVstMaxVendorStrLen);
-  return true;
-}
-
-//-----------------------------------------------------------------------------------------
-VstInt32 Piano::getVendorVersion ()
-{ 
-  return 1000; 
-}
-
-VstInt32 Piano::canDo(char* text)
-{
-	if (strcmp(text, "receiveVstEvents") == 0)
-		return 1;
-	if (strcmp(text, "receiveVstMidiEvent") == 0)
-		return 1;	
-	return -1;
-}
-
-
-int main(int c, char **v) 
-{
-  int note = atoi(v[1]);
-  int t = atof(v[2]);
-  int vel = atoi(v[3]);
-  int N = atoi(v[4]);
-  float dwgs4 = atof(v[5]);
-  float ds = atof(v[6]);
-  float lm = atof(v[7]);
-
-  float *in[2];
-  float *out[2];
-
-  in[0] = new float[t];
-  in[1] = new float[t];
-  out[0] = new float[t];
-  out[1] = new float[t];
-
-  AudioEffect *effect = createEffectInstance(vst2xPluginHostCallback);
-  int blockSize = 64;
-  effect->setBlockSize(blockSize);
-  effect->resume();
-  effect->setParameter(pDwgs4,dwgs4);
-  ((Piano*)effect)->setParameterLiteral(pDownsample,ds);
-  ((Piano*)effect)->setParameterLiteral(pLongModes,lm);
-  
-  //((Piano*)effect)->setParameterLiteral(pStringLength,1.2);
-  ((Piano*)effect)->setParameterLiteral(pStringRadius,1.2);
-
-  
-  for(int k=0; k<N; k++) {
-    int event = 0;
-    MidiEvent midiEvents[8];
-    int nEvents = 5;
-    midiEvents[0].noteOn(note,vel,0,0);
-    midiEvents[1].noteOff(note,vel,0,t-1003);
-    midiEvents[2].noteOn(note,vel,0,t-1003);
-    midiEvents[3].noteOn(note,vel,0,t-71);
-    midiEvents[4].noteOn(note,vel,0,t-70);
-
-    for(int i=0; i<t; i += blockSize) {  
-      
-      for(int j=event; j<nEvents; j++) {
-        if(midiEvents[event].deltaFrames < blockSize) {
-          processMidiEvents(effect, midiEvents+event, 1);        
-          event++;
-        }
-      }
-      for(int j=event; j<nEvents; j++) {
-        midiEvents[j].deltaFrames -= blockSize;
-      }
-      
-
-      int block = std::min(blockSize,t - i);
-      float *in2[2];
-      float *out2[2];
-      in2[0] = in[0] + i;
-      in2[1] = in[1] + i;
-      out2[0] = out[0] + i;
-      out2[1] = out[1] + i;
-
-      processReplacing(effect, in2,out2,block);
-    }
-
-    for(int k=0; k<t; k++) {
-      //printf("%g\n",out[0][k]);
-    }
-  }
-
-
-}
-
-
-/*
-Zhh - h --- Z 
-     Zhv
-Zvv - v --- Z 
-
-  h --- Z
- Zhv
-  v --- Z
-
-*/

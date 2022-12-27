@@ -12,7 +12,9 @@
 //#define logf(format, ...) fprintf(stderr,format,__VA_ARGS__)
 #define logf(format, ...) 
 
-#include "immintrin.h"
+#if defined(__i386__) || defined(__x86_64__)
+ #include "immintrin.h"
+#endif
 
 typedef float vec4 __attribute__ ((vector_size (sizeof(float) * 4)));
 typedef float vec8 __attribute__ ((vector_size (sizeof(float) * 8)));

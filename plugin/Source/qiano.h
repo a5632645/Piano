@@ -2,19 +2,20 @@
 #ifndef PIANO_H
 #define PIANO_H
 
+#include <JuceHeader.h>
+
 #define PIANO_MIN_NOTE 21
 #define PIANO_MAX_NOTE 108
 
 #undef FDN_REVERB
 #define FDN_REVERB 1
 
+const int NUM_NOTES = 128;    // 128 midi notes
 
 #include "filter.h"
 #include "dwgs.h"
 #include "reverb.h"
 #include "hammer.h"
-#include "midi.h"
-#include "vsteffect.h"
 
 enum {
   MaxDecimation = 16,
@@ -114,90 +115,79 @@ protected:
 
 	bool bActive;
 	int Fs;
-  BiquadHP longHP;
-	float alphasb;
+    BiquadHP longHP;
+    float alphasb;
 	float Z2i;
 	float nstringsi;
-  float tranBridgeForce;
-  float longBridgeForce;
-  float longTranBridgeForce;
-  float Z;
-  float Zhv;
-  float vTran;
+    float tranBridgeForce;
+    float longBridgeForce;
+    float longTranBridgeForce;
+    float Z;
+    float Zhv;
+    float vTran;
 
-  int downsample;
-  float longForces[MaxDecimation + 1];
-  float longForcesK[MaxDecimation + 1];
+    int downsample;
+    float longForces[MaxDecimation + 1];
+    float longForcesK[MaxDecimation + 1];
 
-  float tranForces[TranBufferSize]  __attribute__((aligned(32)));
-  float tranForcesH[TranBufferSize]  __attribute__((aligned(32)));
-  float longTranForces[TranBufferSize]  __attribute__((aligned(32)));
+    float tranForces[TranBufferSize]  __attribute__((aligned(32)));
+    float tranForcesH[TranBufferSize]  __attribute__((aligned(32)));
+    float longTranForces[TranBufferSize]  __attribute__((aligned(32)));
 
-  
-  float T;
-  float mu;
+    float T;
+    float mu;
 	float f;
-  int nstrings;
+    int nstrings;
 
 	dwgs *stringT[3];	
 	dwgs *stringHT[3];	
-  Hammer *hammer;
+    Hammer *hammer;
 
-  float outUp[8] __attribute__((aligned(32)));
-  float outDown[8] __attribute__((aligned(32)));
-  int tUp;
-  int tDown;
-  int upSampleDelayNeeded;
-  int downSampleDelayNeeded;
+    float outUp[8] __attribute__((aligned(32)));
+    float outDown[8] __attribute__((aligned(32)));
+    int tUp;
+    int tDown;
+    int upSampleDelayNeeded;
+    int downSampleDelayNeeded;
 
-  bool bInit4;
-  int tTran;
-  int tLong;
-  int tTranRead;
-  int longDelay;
-  int upsample;
+    bool bInit4;
+    int tTran;
+    int tLong;
+    int tTranRead;
+    int longDelay;
+    int upsample;
 
-  ResampleFIR downSampleFilter;
-  ResampleFIR upSampleFilter;
+    ResampleFIR downSampleFilter;
+    ResampleFIR upSampleFilter;
 };
 
-class Piano : public VstEffect
+class Piano
 {
 public:
-	Piano(audioMasterCallback audioMaster, int parameters);
+	Piano (int parameters);
 	~Piano();
 
 	void addVoice(PianoNote *v);	
 	void removeVoice(PianoNote *v);
 	void process(float *out, int samples);	
 	void process(float **in, float **out, int frameSamples, int offset);
-	virtual void process(float **in, float **out, int frameSamples);
-  void init(float Fs, int blockSize);
-  void triggerOn(int note, float velocity, float *tune);
+	void process(float **in, float **out, int frameSamples, juce::MidiBuffer&);
+    void init(float Fs, int blockSize);
+    void triggerOn(int note, float velocity, float *tune);
 
 	//vst crap
-  virtual void resume();
-	virtual void setParameterLiteral (VstInt32 index, float value);
-	virtual void setParameter (VstInt32 index, float value);
-	virtual float getParameter (VstInt32 index);
-	virtual void getParameterLabel (VstInt32 index, char* label);
-	virtual void getParameterDisplay (VstInt32 index, char* text);
-	virtual void getParameterName (VstInt32 index, char* text);
-
-	virtual bool getEffectName (char* name);
-	virtual bool getVendorString (char* text);
-	virtual bool getProductString (char* text);
-	virtual VstInt32 getVendorVersion();
-	virtual VstInt32 canDo(char* text);
+	void setParameter (int32_t index, float value);
+	float getParameter (int32_t index);
 
 protected:     
-  friend class PianoNote;
-  Value vals[NumParams];
+    friend class PianoNote;
+    Value vals[NumParams];
 	PianoNote *voiceList;
 	PianoNote *noteArray[NUM_NOTES];
+    int blockSize;
 	float Fs;
-  //int blockSize;
-  float *input;
+    //int blockSize;
+    float *input;
 
 #ifdef FDN_REVERB
   Reverb *soundboard;
@@ -206,7 +196,6 @@ protected:
 #endif
 };
 
-AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 void qianoNote(int note, int N, float velocity, double *x, double *tune);
 extern "C" void qianoNote(int note, int N, float velocity, float *x, float *tune);
 	

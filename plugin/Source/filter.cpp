@@ -67,28 +67,28 @@ void Filter :: merge(const Filter &f)
 	init(upsample);
 }
 
-float Db(float B, float f, int M) 
+float Db (float B, float f, int M)
 {
   float C1,C2,k1,k2,k3;
   if(M==4) {
-    C1 = .069618;
-    C2 = 2.0427;
-    k1 = -.00050469;
-    k2 = -.0064264;
-    k3 = -2.8743;
+    C1 = 0.069618f;
+    C2 = 2.0427f;
+    k1 = -0.00050469f;
+    k2 = -0.0064264f;
+    k3 = -2.8743f;
   } else {
-    C1 = .071089;
-    C2 = 2.1074;
-    k1 = -.0026580;
-    k2 = -.014811;
-    k3 = -2.9018;
+    C1 = 0.071089f;
+    C2 = 2.1074f;
+    k1 = -0.0026580f;
+    k2 = -0.014811f;
+    k3 = -2.9018f;
   }
 
   float logB = log(B);
   float kd = exp(k1*logB*logB + k2*logB + k3);
   float Cd = exp(C1*logB+C2);
-  float halfstep = pow(2.0,1.0/12.0);
-  float Ikey = log(f*halfstep/27.5) / log(halfstep);
+  float halfstep = pow (2.0f, 1.0f / 12.0f);
+  float Ikey = log (f * halfstep / 27.5f) / log (halfstep);
   float D = exp(Cd - Ikey*kd);
   return D;
 }
@@ -98,9 +98,9 @@ Filter :: ~Filter()
 
 }
 
-Filter :: Filter(int nmax)
+Filter :: Filter(int nmax_)
 {
-  this->nmax = nmax;
+  nmax = nmax_;
   int n4 = nmax / 4;
   posix_memalign((void**)&b,32,(n4+3)*sizeof(vec4));
   posix_memalign((void**)&a,32,(n4+3)*sizeof(vec4));
@@ -121,9 +121,9 @@ Filter :: Filter(int nmax)
   xskip = xsize;
 }
 
-void Filter :: init(int upsample)
+void Filter :: init(int upsample_)
 {
-  this->upsample = upsample;
+  upsample = upsample_;
   bend = b + n;
   aend = a + n - 1;
   aend4 = a + n - 4;

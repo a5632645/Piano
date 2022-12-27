@@ -1,3 +1,0 @@
-#!/bin/bash
-
-rm -rf ~/Library/Audio/Plug-Ins/VST/qiano.vst && cp -rf approot/Library/Audio/Plug-Ins/VST/qiano.vst ~/Library/Audio/Plug-Ins/VST/
