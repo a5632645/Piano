@@ -230,7 +230,7 @@ vec4 Filter::filter4(vec4 in)
         y+=upsample;
     }
 
-    out += outa;
+    out = simde_mm_add_ps (out, outa);
 
     y = yc - 4;
     if(y < this->y) y += xskip;
@@ -381,8 +381,8 @@ void MSD2Filter::filter(float in[2], float out[2])
 
 void MSD2Filter::filter4(vec4 in[2], vec4 out[2])
 {
-    out[0] = simde_mm_broadcast_ss(&f11) * in[0] + simde_mm_broadcast_ss(&f12) * in[1];
-    out[1] = simde_mm_broadcast_ss(&f21) * in[0] + simde_mm_broadcast_ss(&f22) * in[1];
+    out[0] = simde_mm_add_ps (simde_mm_mul_ps (simde_mm_broadcast_ss (&f11), in[0]), simde_mm_mul_ps (simde_mm_broadcast_ss(&f12), in[1]));
+    out[1] = simde_mm_add_ps (simde_mm_mul_ps (simde_mm_broadcast_ss (&f21), in[0]), simde_mm_mul_ps (simde_mm_broadcast_ss(&f22), in[1]));
 }
 
 void MSD2Filter::create(float Fs,

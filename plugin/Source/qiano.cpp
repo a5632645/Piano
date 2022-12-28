@@ -266,9 +266,9 @@ vec4 PianoNote::go4()
 
     for(int k=0;k<nstrings;k++)
 	{
-        sbloadT += stringT[k]->go_string4();
+        sbloadT = simde_mm_add_ps (sbloadT, stringT[k]->go_string4());
 #ifdef HSTRING
-        sbloadHT += stringHT[k]->go_string4();
+        sbloadHT = simde_mm_add_ps (sbloadHT, stringHT[k]->go_string4());
 #endif
     }
 
@@ -282,11 +282,11 @@ vec4 PianoNote::go4()
 	
     for(int k=0;k<nstrings;k++)
 	{
-        tranForce += stringT[k]->go_soundboard4(out[0]);
+        tranForce = simde_mm_add_ps (tranForce, stringT[k]->go_soundboard4(out[0]));
 #ifdef HSTRING
-        tranForceH += stringHT[k]->go_soundboard4(out[1]);
+        tranForceH = simde_mm_add_ps (tranForceH, stringHT[k]->go_soundboard4(out[1]));
 #endif
-        longTranForce += stringT[k]->longTran4();
+        longTranForce = simde_mm_add_ps (longTranForce, stringT[k]->longTran4());
     }
 
     simde_mm_store_ps (longTranForces + tTran, longTranForce);
@@ -298,10 +298,13 @@ vec4 PianoNote::go4()
     //vec4 longForce = {0};
 
     float longMix = v[pLongitudinalMix];
-    vec4 output = (simde_mm_load_ps(tranForces + tTranRead) + simde_mm_load_ps(tranForcesH + tTranRead)) * simde_mm_broadcast_ss(&tranBridgeForce) + (simde_mm_load_ps(longTranForces + tTranRead) * simde_mm_broadcast_ss (&longTranBridgeForce) + longForce * simde_mm_broadcast_ss (&longBridgeForce)) * simde_mm_broadcast_ss (&longMix);
+    auto s1 = simde_mm_add_ps (simde_mm_load_ps(tranForces + tTranRead), simde_mm_load_ps(tranForcesH + tTranRead));
+    auto s2 = simde_mm_add_ps (simde_mm_mul_ps (simde_mm_load_ps(longTranForces + tTranRead), simde_mm_broadcast_ss (&longTranBridgeForce)), simde_mm_mul_ps (longForce, simde_mm_broadcast_ss (&longBridgeForce)));
+
+    vec4 output = simde_mm_add_ps (simde_mm_mul_ps (s1, simde_mm_broadcast_ss(&tranBridgeForce)), simde_mm_mul_ps (s2, simde_mm_broadcast_ss (&longMix)));
 
     vec4 delayed = outputdelay.goDelay4(output);
-    energy = energy + sum4(output*output - delayed*delayed);
+    energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
     if(energy>maxEnergy)
         maxEnergy = energy;
 

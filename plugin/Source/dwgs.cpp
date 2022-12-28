@@ -556,7 +556,7 @@ vec4 dwgs::go_string4()
 
     v = d0.goDelay4(v0_2);
     v = hammerDelay.filter4(v);
-    v1_2 = d1.goDelay4(-v);
+    v1_2 = d1.goDelay4 (simde_x_mm_negate_ps (v));
     v1_3 = v1_2;
     v1_4 = d3.goDelay4(v1_3);
     v = v1_4;
@@ -573,7 +573,7 @@ vec4 dwgs::go_string4()
 
 vec4 dwgs::go_soundboard4(vec4 load_sb)
 {
-    v0_5 = load_sb - v1_5;
+    v0_5 = simde_mm_sub_ps (load_sb, v1_5);
     v0_4 = fracDelayTop.filter4(v0_5);
     v0_3 = d2.goDelay4(v0_4);
     v0_2 = v0_3;
@@ -582,12 +582,12 @@ vec4 dwgs::go_soundboard4(vec4 load_sb)
     //cout << "4 load_sb=" << load_sb << " / " << v0_2 << " / " << v0_4 <<  " / " << v1_3 << "\n";
     //cout << "4 load_sb=" << load_sb << " / " << v0_2 << " / " << v1_4 << " / " << v0_5 << " / " << v1_5 << "\n";
 #endif
-    return v0_5 - v1_5;
+    return simde_mm_sub_ps (v0_5, v1_5);
 }
 
 vec4 dwgs::longTran4() {
-    vec4 v = (v0_5 - v1_5);
-    return v * v;
+    vec4 v = simde_mm_sub_ps (v0_5, v1_5);
+    return simde_mm_mul_ps (v, v);
 }
 
 float dwgs::longTran() {

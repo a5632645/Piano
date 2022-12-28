@@ -68,8 +68,9 @@ float sse_dot(int N, float *A, float *B) {
         dot += A[i] * B[i];
     }
     
-    if(N32 || N8) {
-        temp0 += temp1 + temp2 + temp3;
+    if (N32 || N8) 
+    {
+        temp0 = simde_mm256_add_ps (temp0, simde_mm256_add_ps (temp1, simde_mm256_add_ps (temp2, temp3)));
         dot += sum8(temp0);
     }
 

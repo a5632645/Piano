@@ -13,8 +13,12 @@
 #include "../../modules/simde/x86/sse3.h"
 #include "../../modules/simde/x86/svml.h"
 
-typedef simde__m128 vec4;
-typedef simde__m256 vec8;
+#define vec4 simde__m128
+#define vec8 simde__m256
+
+#ifdef _WIN32
+#define posix_memalign(p, a, s) (((*(p)) = _aligned_malloc((s), (a))), *(p) ? 0 :errno)
+#endif
 
 #define HALFPI 1.5707963267948966192313216916398
 #define PI 3.1415926535897932384626433832795
