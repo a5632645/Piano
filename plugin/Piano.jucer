@@ -10,6 +10,378 @@
               lv2Uri="https://socalabs.com/piano/">
   <MAINGROUP id="Hs1HPA" name="Piano">
     <GROUP id="{0CE63D98-F319-7656-21CD-D7A21B4A4B6C}" name="Source">
+      <GROUP id="{04084B16-0BC0-C7A0-B2F4-189199A72740}" name="SIMDE">
+        <GROUP id="{8F4B7A29-6A9F-790B-BA1A-739C0C590356}" name="arm">
+          <GROUP id="{4768E98F-A55D-BA7B-8216-B61E408179F8}" name="neon">
+            <FILE id="IPy6NW" name="aba.h" compile="0" resource="0" file="../modules/simde/arm/neon/aba.h"/>
+            <FILE id="F7knEo" name="abd.h" compile="0" resource="0" file="../modules/simde/arm/neon/abd.h"/>
+            <FILE id="mq2zW1" name="abdl.h" compile="0" resource="0" file="../modules/simde/arm/neon/abdl.h"/>
+            <FILE id="DyRxxG" name="abs.h" compile="0" resource="0" file="../modules/simde/arm/neon/abs.h"/>
+            <FILE id="WzsTrt" name="add.h" compile="0" resource="0" file="../modules/simde/arm/neon/add.h"/>
+            <FILE id="F2sAub" name="addhn.h" compile="0" resource="0" file="../modules/simde/arm/neon/addhn.h"/>
+            <FILE id="JchevO" name="addl.h" compile="0" resource="0" file="../modules/simde/arm/neon/addl.h"/>
+            <FILE id="XknOKD" name="addl_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/addl_high.h"/>
+            <FILE id="H1uiia" name="addlv.h" compile="0" resource="0" file="../modules/simde/arm/neon/addlv.h"/>
+            <FILE id="VlFqaK" name="addv.h" compile="0" resource="0" file="../modules/simde/arm/neon/addv.h"/>
+            <FILE id="fgwFVC" name="addw.h" compile="0" resource="0" file="../modules/simde/arm/neon/addw.h"/>
+            <FILE id="nXrm0K" name="addw_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/addw_high.h"/>
+            <FILE id="bodiAU" name="and.h" compile="0" resource="0" file="../modules/simde/arm/neon/and.h"/>
+            <FILE id="UtLOzw" name="bcax.h" compile="0" resource="0" file="../modules/simde/arm/neon/bcax.h"/>
+            <FILE id="FTKCmU" name="bic.h" compile="0" resource="0" file="../modules/simde/arm/neon/bic.h"/>
+            <FILE id="yWcziG" name="bsl.h" compile="0" resource="0" file="../modules/simde/arm/neon/bsl.h"/>
+            <FILE id="gvJrzC" name="cage.h" compile="0" resource="0" file="../modules/simde/arm/neon/cage.h"/>
+            <FILE id="aUphV2" name="cagt.h" compile="0" resource="0" file="../modules/simde/arm/neon/cagt.h"/>
+            <FILE id="hr3YFH" name="ceq.h" compile="0" resource="0" file="../modules/simde/arm/neon/ceq.h"/>
+            <FILE id="xq97gs" name="ceqz.h" compile="0" resource="0" file="../modules/simde/arm/neon/ceqz.h"/>
+            <FILE id="G4TIMp" name="cge.h" compile="0" resource="0" file="../modules/simde/arm/neon/cge.h"/>
+            <FILE id="L0cQL0" name="cgez.h" compile="0" resource="0" file="../modules/simde/arm/neon/cgez.h"/>
+            <FILE id="iYy2Ua" name="cgt.h" compile="0" resource="0" file="../modules/simde/arm/neon/cgt.h"/>
+            <FILE id="kvagt6" name="cgtz.h" compile="0" resource="0" file="../modules/simde/arm/neon/cgtz.h"/>
+            <FILE id="tHxFHl" name="cle.h" compile="0" resource="0" file="../modules/simde/arm/neon/cle.h"/>
+            <FILE id="q3htqf" name="clez.h" compile="0" resource="0" file="../modules/simde/arm/neon/clez.h"/>
+            <FILE id="XBJ95I" name="cls.h" compile="0" resource="0" file="../modules/simde/arm/neon/cls.h"/>
+            <FILE id="KfIctL" name="clt.h" compile="0" resource="0" file="../modules/simde/arm/neon/clt.h"/>
+            <FILE id="UbpnRz" name="cltz.h" compile="0" resource="0" file="../modules/simde/arm/neon/cltz.h"/>
+            <FILE id="U799u4" name="clz.h" compile="0" resource="0" file="../modules/simde/arm/neon/clz.h"/>
+            <FILE id="NnkB7a" name="cmla.h" compile="0" resource="0" file="../modules/simde/arm/neon/cmla.h"/>
+            <FILE id="sdcB8D" name="cmla_rot90.h" compile="0" resource="0" file="../modules/simde/arm/neon/cmla_rot90.h"/>
+            <FILE id="irq1w5" name="cmla_rot180.h" compile="0" resource="0" file="../modules/simde/arm/neon/cmla_rot180.h"/>
+            <FILE id="LWKLrH" name="cmla_rot270.h" compile="0" resource="0" file="../modules/simde/arm/neon/cmla_rot270.h"/>
+            <FILE id="UpgaNM" name="cnt.h" compile="0" resource="0" file="../modules/simde/arm/neon/cnt.h"/>
+            <FILE id="laIa6B" name="combine.h" compile="0" resource="0" file="../modules/simde/arm/neon/combine.h"/>
+            <FILE id="vsMoii" name="create.h" compile="0" resource="0" file="../modules/simde/arm/neon/create.h"/>
+            <FILE id="GFlGRB" name="cvt.h" compile="0" resource="0" file="../modules/simde/arm/neon/cvt.h"/>
+            <FILE id="NH8gBJ" name="dot.h" compile="0" resource="0" file="../modules/simde/arm/neon/dot.h"/>
+            <FILE id="P7RsMN" name="dot_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/dot_lane.h"/>
+            <FILE id="a5G4Xy" name="dup_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/dup_lane.h"/>
+            <FILE id="SfEOnF" name="dup_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/dup_n.h"/>
+            <FILE id="evcXuZ" name="eor.h" compile="0" resource="0" file="../modules/simde/arm/neon/eor.h"/>
+            <FILE id="WlDuSX" name="ext.h" compile="0" resource="0" file="../modules/simde/arm/neon/ext.h"/>
+            <FILE id="GtfFK8" name="fma.h" compile="0" resource="0" file="../modules/simde/arm/neon/fma.h"/>
+            <FILE id="E2Y4tW" name="fma_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/fma_lane.h"/>
+            <FILE id="lZp7Zy" name="fma_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/fma_n.h"/>
+            <FILE id="JDuwiS" name="get_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/get_high.h"/>
+            <FILE id="MEZvgv" name="get_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/get_lane.h"/>
+            <FILE id="QqALkO" name="get_low.h" compile="0" resource="0" file="../modules/simde/arm/neon/get_low.h"/>
+            <FILE id="H61Eag" name="hadd.h" compile="0" resource="0" file="../modules/simde/arm/neon/hadd.h"/>
+            <FILE id="l41bB2" name="hsub.h" compile="0" resource="0" file="../modules/simde/arm/neon/hsub.h"/>
+            <FILE id="mcOLLl" name="ld1.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld1.h"/>
+            <FILE id="I7P5g5" name="ld1_dup.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld1_dup.h"/>
+            <FILE id="XifBoi" name="ld1_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld1_lane.h"/>
+            <FILE id="FQug0v" name="ld2.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld2.h"/>
+            <FILE id="gtbXre" name="ld3.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld3.h"/>
+            <FILE id="MEdFjA" name="ld4.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld4.h"/>
+            <FILE id="V2UUny" name="ld4_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/ld4_lane.h"/>
+            <FILE id="k5geu1" name="max.h" compile="0" resource="0" file="../modules/simde/arm/neon/max.h"/>
+            <FILE id="wxKWj6" name="maxnm.h" compile="0" resource="0" file="../modules/simde/arm/neon/maxnm.h"/>
+            <FILE id="q2oE3g" name="maxv.h" compile="0" resource="0" file="../modules/simde/arm/neon/maxv.h"/>
+            <FILE id="iFvNqK" name="min.h" compile="0" resource="0" file="../modules/simde/arm/neon/min.h"/>
+            <FILE id="RadR3n" name="minnm.h" compile="0" resource="0" file="../modules/simde/arm/neon/minnm.h"/>
+            <FILE id="RJ2zsn" name="minv.h" compile="0" resource="0" file="../modules/simde/arm/neon/minv.h"/>
+            <FILE id="WT91q2" name="mla.h" compile="0" resource="0" file="../modules/simde/arm/neon/mla.h"/>
+            <FILE id="zU2ZHB" name="mla_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mla_n.h"/>
+            <FILE id="fPSA0I" name="mlal.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlal.h"/>
+            <FILE id="UGayWz" name="mlal_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlal_high.h"/>
+            <FILE id="OQfUsN" name="mlal_high_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlal_high_n.h"/>
+            <FILE id="fugOYy" name="mlal_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlal_lane.h"/>
+            <FILE id="aPgSRD" name="mlal_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlal_n.h"/>
+            <FILE id="tVWLST" name="mls.h" compile="0" resource="0" file="../modules/simde/arm/neon/mls.h"/>
+            <FILE id="SSlrMy" name="mls_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mls_n.h"/>
+            <FILE id="SHmqse" name="mlsl.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlsl.h"/>
+            <FILE id="zgWYvR" name="mlsl_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlsl_high.h"/>
+            <FILE id="YX2vDr" name="mlsl_high_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlsl_high_n.h"/>
+            <FILE id="dsHzVA" name="mlsl_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlsl_lane.h"/>
+            <FILE id="HIfkd4" name="mlsl_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mlsl_n.h"/>
+            <FILE id="iX8L0N" name="movl.h" compile="0" resource="0" file="../modules/simde/arm/neon/movl.h"/>
+            <FILE id="yibUF7" name="movl_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/movl_high.h"/>
+            <FILE id="Ie2cOo" name="movn.h" compile="0" resource="0" file="../modules/simde/arm/neon/movn.h"/>
+            <FILE id="EHbCgz" name="movn_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/movn_high.h"/>
+            <FILE id="bI3R2q" name="mul.h" compile="0" resource="0" file="../modules/simde/arm/neon/mul.h"/>
+            <FILE id="hhdqOQ" name="mul_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/mul_lane.h"/>
+            <FILE id="lko07q" name="mul_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mul_n.h"/>
+            <FILE id="zZk5Qt" name="mull.h" compile="0" resource="0" file="../modules/simde/arm/neon/mull.h"/>
+            <FILE id="brbs3H" name="mull_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/mull_high.h"/>
+            <FILE id="aPVepw" name="mull_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/mull_lane.h"/>
+            <FILE id="IHFkxt" name="mull_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/mull_n.h"/>
+            <FILE id="Qlfeur" name="mvn.h" compile="0" resource="0" file="../modules/simde/arm/neon/mvn.h"/>
+            <FILE id="sdj1wI" name="neg.h" compile="0" resource="0" file="../modules/simde/arm/neon/neg.h"/>
+            <FILE id="NGUo9b" name="orn.h" compile="0" resource="0" file="../modules/simde/arm/neon/orn.h"/>
+            <FILE id="tlHk0B" name="orr.h" compile="0" resource="0" file="../modules/simde/arm/neon/orr.h"/>
+            <FILE id="QejEXy" name="padal.h" compile="0" resource="0" file="../modules/simde/arm/neon/padal.h"/>
+            <FILE id="jWdtuW" name="padd.h" compile="0" resource="0" file="../modules/simde/arm/neon/padd.h"/>
+            <FILE id="eRqkxv" name="paddl.h" compile="0" resource="0" file="../modules/simde/arm/neon/paddl.h"/>
+            <FILE id="QgTg7I" name="pmax.h" compile="0" resource="0" file="../modules/simde/arm/neon/pmax.h"/>
+            <FILE id="b5NnkM" name="pmin.h" compile="0" resource="0" file="../modules/simde/arm/neon/pmin.h"/>
+            <FILE id="lAf9qp" name="qabs.h" compile="0" resource="0" file="../modules/simde/arm/neon/qabs.h"/>
+            <FILE id="uJ8ksp" name="qadd.h" compile="0" resource="0" file="../modules/simde/arm/neon/qadd.h"/>
+            <FILE id="LpyuY8" name="qdmulh.h" compile="0" resource="0" file="../modules/simde/arm/neon/qdmulh.h"/>
+            <FILE id="bg9ohR" name="qdmulh_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/qdmulh_lane.h"/>
+            <FILE id="KonjHA" name="qdmulh_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qdmulh_n.h"/>
+            <FILE id="SvXI6D" name="qdmull.h" compile="0" resource="0" file="../modules/simde/arm/neon/qdmull.h"/>
+            <FILE id="I46frt" name="qmovn.h" compile="0" resource="0" file="../modules/simde/arm/neon/qmovn.h"/>
+            <FILE id="R3N0SZ" name="qmovn_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/qmovn_high.h"/>
+            <FILE id="BozBul" name="qmovun.h" compile="0" resource="0" file="../modules/simde/arm/neon/qmovun.h"/>
+            <FILE id="bbrXri" name="qneg.h" compile="0" resource="0" file="../modules/simde/arm/neon/qneg.h"/>
+            <FILE id="NrdebU" name="qrdmulh.h" compile="0" resource="0" file="../modules/simde/arm/neon/qrdmulh.h"/>
+            <FILE id="JuR1xA" name="qrdmulh_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/qrdmulh_lane.h"/>
+            <FILE id="sVn7Pk" name="qrdmulh_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qrdmulh_n.h"/>
+            <FILE id="OseBAX" name="qrshrn_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qrshrn_n.h"/>
+            <FILE id="fgOwuW" name="qrshrun_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qrshrun_n.h"/>
+            <FILE id="h7FRMT" name="qshl.h" compile="0" resource="0" file="../modules/simde/arm/neon/qshl.h"/>
+            <FILE id="VHojyt" name="qshlu_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qshlu_n.h"/>
+            <FILE id="Hb8kMl" name="qshrn_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qshrn_n.h"/>
+            <FILE id="PLa4oF" name="qshrun_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/qshrun_n.h"/>
+            <FILE id="Jusct9" name="qsub.h" compile="0" resource="0" file="../modules/simde/arm/neon/qsub.h"/>
+            <FILE id="r2tmDr" name="qtbl.h" compile="0" resource="0" file="../modules/simde/arm/neon/qtbl.h"/>
+            <FILE id="tmGefh" name="qtbx.h" compile="0" resource="0" file="../modules/simde/arm/neon/qtbx.h"/>
+            <FILE id="LDWr4A" name="rbit.h" compile="0" resource="0" file="../modules/simde/arm/neon/rbit.h"/>
+            <FILE id="RtECp7" name="recpe.h" compile="0" resource="0" file="../modules/simde/arm/neon/recpe.h"/>
+            <FILE id="cFpBoJ" name="recps.h" compile="0" resource="0" file="../modules/simde/arm/neon/recps.h"/>
+            <FILE id="PwCjTV" name="reinterpret.h" compile="0" resource="0" file="../modules/simde/arm/neon/reinterpret.h"/>
+            <FILE id="KujYRY" name="rev16.h" compile="0" resource="0" file="../modules/simde/arm/neon/rev16.h"/>
+            <FILE id="XBsf5t" name="rev32.h" compile="0" resource="0" file="../modules/simde/arm/neon/rev32.h"/>
+            <FILE id="u2FgSP" name="rev64.h" compile="0" resource="0" file="../modules/simde/arm/neon/rev64.h"/>
+            <FILE id="QmDNG2" name="rhadd.h" compile="0" resource="0" file="../modules/simde/arm/neon/rhadd.h"/>
+            <FILE id="ebGgeT" name="rnd.h" compile="0" resource="0" file="../modules/simde/arm/neon/rnd.h"/>
+            <FILE id="qTCIVB" name="rndi.h" compile="0" resource="0" file="../modules/simde/arm/neon/rndi.h"/>
+            <FILE id="OZU6Wq" name="rndm.h" compile="0" resource="0" file="../modules/simde/arm/neon/rndm.h"/>
+            <FILE id="AqbMa3" name="rndn.h" compile="0" resource="0" file="../modules/simde/arm/neon/rndn.h"/>
+            <FILE id="j4Qkwm" name="rndp.h" compile="0" resource="0" file="../modules/simde/arm/neon/rndp.h"/>
+            <FILE id="Kx37WO" name="rshl.h" compile="0" resource="0" file="../modules/simde/arm/neon/rshl.h"/>
+            <FILE id="r99a7x" name="rshr_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/rshr_n.h"/>
+            <FILE id="JCNeYR" name="rshrn_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/rshrn_n.h"/>
+            <FILE id="JHruWC" name="rsqrte.h" compile="0" resource="0" file="../modules/simde/arm/neon/rsqrte.h"/>
+            <FILE id="lnst3D" name="rsqrts.h" compile="0" resource="0" file="../modules/simde/arm/neon/rsqrts.h"/>
+            <FILE id="ojiAlD" name="rsra_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/rsra_n.h"/>
+            <FILE id="gIBtyS" name="set_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/set_lane.h"/>
+            <FILE id="mxegWS" name="shl.h" compile="0" resource="0" file="../modules/simde/arm/neon/shl.h"/>
+            <FILE id="ghVaO0" name="shl_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/shl_n.h"/>
+            <FILE id="qRDbRO" name="shll_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/shll_n.h"/>
+            <FILE id="HLnqRr" name="shr_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/shr_n.h"/>
+            <FILE id="uZOArz" name="shrn_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/shrn_n.h"/>
+            <FILE id="YzCISa" name="sqadd.h" compile="0" resource="0" file="../modules/simde/arm/neon/sqadd.h"/>
+            <FILE id="EyhqbP" name="sra_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/sra_n.h"/>
+            <FILE id="L7h9xA" name="sri_n.h" compile="0" resource="0" file="../modules/simde/arm/neon/sri_n.h"/>
+            <FILE id="TZl9TU" name="st1.h" compile="0" resource="0" file="../modules/simde/arm/neon/st1.h"/>
+            <FILE id="cLKMqH" name="st1_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/st1_lane.h"/>
+            <FILE id="VVF0cr" name="st2.h" compile="0" resource="0" file="../modules/simde/arm/neon/st2.h"/>
+            <FILE id="i81ZWZ" name="st2_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/st2_lane.h"/>
+            <FILE id="xBC0OI" name="st3.h" compile="0" resource="0" file="../modules/simde/arm/neon/st3.h"/>
+            <FILE id="i7Ervr" name="st3_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/st3_lane.h"/>
+            <FILE id="BZby9y" name="st4.h" compile="0" resource="0" file="../modules/simde/arm/neon/st4.h"/>
+            <FILE id="g8S6pS" name="st4_lane.h" compile="0" resource="0" file="../modules/simde/arm/neon/st4_lane.h"/>
+            <FILE id="PZHvuJ" name="sub.h" compile="0" resource="0" file="../modules/simde/arm/neon/sub.h"/>
+            <FILE id="l8VdQC" name="subhn.h" compile="0" resource="0" file="../modules/simde/arm/neon/subhn.h"/>
+            <FILE id="Pb4Frb" name="subl.h" compile="0" resource="0" file="../modules/simde/arm/neon/subl.h"/>
+            <FILE id="Yx6GLo" name="subl_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/subl_high.h"/>
+            <FILE id="rK3d6X" name="subw.h" compile="0" resource="0" file="../modules/simde/arm/neon/subw.h"/>
+            <FILE id="JQEvab" name="subw_high.h" compile="0" resource="0" file="../modules/simde/arm/neon/subw_high.h"/>
+            <FILE id="FZLg1a" name="tbl.h" compile="0" resource="0" file="../modules/simde/arm/neon/tbl.h"/>
+            <FILE id="L4Cfux" name="tbx.h" compile="0" resource="0" file="../modules/simde/arm/neon/tbx.h"/>
+            <FILE id="tB9Chl" name="trn.h" compile="0" resource="0" file="../modules/simde/arm/neon/trn.h"/>
+            <FILE id="dhS92p" name="trn1.h" compile="0" resource="0" file="../modules/simde/arm/neon/trn1.h"/>
+            <FILE id="WBgtqQ" name="trn2.h" compile="0" resource="0" file="../modules/simde/arm/neon/trn2.h"/>
+            <FILE id="RDgjfz" name="tst.h" compile="0" resource="0" file="../modules/simde/arm/neon/tst.h"/>
+            <FILE id="GKKsSL" name="types.h" compile="0" resource="0" file="../modules/simde/arm/neon/types.h"/>
+            <FILE id="SqYUOd" name="uqadd.h" compile="0" resource="0" file="../modules/simde/arm/neon/uqadd.h"/>
+            <FILE id="PRIElL" name="uzp.h" compile="0" resource="0" file="../modules/simde/arm/neon/uzp.h"/>
+            <FILE id="kkAK7R" name="uzp1.h" compile="0" resource="0" file="../modules/simde/arm/neon/uzp1.h"/>
+            <FILE id="v8Itj2" name="uzp2.h" compile="0" resource="0" file="../modules/simde/arm/neon/uzp2.h"/>
+            <FILE id="iQYm8P" name="xar.h" compile="0" resource="0" file="../modules/simde/arm/neon/xar.h"/>
+            <FILE id="JySryX" name="zip.h" compile="0" resource="0" file="../modules/simde/arm/neon/zip.h"/>
+            <FILE id="byMpAt" name="zip1.h" compile="0" resource="0" file="../modules/simde/arm/neon/zip1.h"/>
+            <FILE id="yFIHIc" name="zip2.h" compile="0" resource="0" file="../modules/simde/arm/neon/zip2.h"/>
+          </GROUP>
+          <GROUP id="{4B016084-779D-E684-76FC-63E2A6E2978C}" name="sve">
+            <FILE id="f9kjfW" name="add.h" compile="0" resource="0" file="../modules/simde/arm/sve/add.h"/>
+            <FILE id="nEd0Va" name="and.h" compile="0" resource="0" file="../modules/simde/arm/sve/and.h"/>
+            <FILE id="dEVUOG" name="cmplt.h" compile="0" resource="0" file="../modules/simde/arm/sve/cmplt.h"/>
+            <FILE id="Vo5o8W" name="cnt.h" compile="0" resource="0" file="../modules/simde/arm/sve/cnt.h"/>
+            <FILE id="Zry8WU" name="dup.h" compile="0" resource="0" file="../modules/simde/arm/sve/dup.h"/>
+            <FILE id="Zvg7fs" name="ld1.h" compile="0" resource="0" file="../modules/simde/arm/sve/ld1.h"/>
+            <FILE id="Hb9jMz" name="ptest.h" compile="0" resource="0" file="../modules/simde/arm/sve/ptest.h"/>
+            <FILE id="ZgUT35" name="ptrue.h" compile="0" resource="0" file="../modules/simde/arm/sve/ptrue.h"/>
+            <FILE id="dRmSB7" name="qadd.h" compile="0" resource="0" file="../modules/simde/arm/sve/qadd.h"/>
+            <FILE id="omeOta" name="reinterpret.h" compile="0" resource="0" file="../modules/simde/arm/sve/reinterpret.h"/>
+            <FILE id="DI5OKy" name="sel.h" compile="0" resource="0" file="../modules/simde/arm/sve/sel.h"/>
+            <FILE id="m9wcTt" name="st1.h" compile="0" resource="0" file="../modules/simde/arm/sve/st1.h"/>
+            <FILE id="s9wy4d" name="sub.h" compile="0" resource="0" file="../modules/simde/arm/sve/sub.h"/>
+            <FILE id="fdBKRz" name="types.h" compile="0" resource="0" file="../modules/simde/arm/sve/types.h"/>
+            <FILE id="s3usXw" name="whilelt.h" compile="0" resource="0" file="../modules/simde/arm/sve/whilelt.h"/>
+          </GROUP>
+          <FILE id="NC9NAq" name="neon.h" compile="0" resource="0" file="../modules/simde/arm/neon.h"/>
+          <FILE id="CDrBX2" name="sve.h" compile="0" resource="0" file="../modules/simde/arm/sve.h"/>
+        </GROUP>
+        <GROUP id="{C16869D5-7440-A7C3-4BE9-94D094D1ECCD}" name="mips">
+          <GROUP id="{312E03F6-A106-2135-FA58-A779128569B8}" name="msa">
+            <FILE id="u369Tp" name="add_a.h" compile="0" resource="0" file="../modules/simde/mips/msa/add_a.h"/>
+            <FILE id="xaYi8b" name="adds.h" compile="0" resource="0" file="../modules/simde/mips/msa/adds.h"/>
+            <FILE id="Qy4BFL" name="adds_a.h" compile="0" resource="0" file="../modules/simde/mips/msa/adds_a.h"/>
+            <FILE id="RGd5vI" name="addv.h" compile="0" resource="0" file="../modules/simde/mips/msa/addv.h"/>
+            <FILE id="Sv9emQ" name="addvi.h" compile="0" resource="0" file="../modules/simde/mips/msa/addvi.h"/>
+            <FILE id="tsd3WG" name="and.h" compile="0" resource="0" file="../modules/simde/mips/msa/and.h"/>
+            <FILE id="bmrq2G" name="andi.h" compile="0" resource="0" file="../modules/simde/mips/msa/andi.h"/>
+            <FILE id="sqjcar" name="ld.h" compile="0" resource="0" file="../modules/simde/mips/msa/ld.h"/>
+            <FILE id="MIdB3g" name="madd.h" compile="0" resource="0" file="../modules/simde/mips/msa/madd.h"/>
+            <FILE id="ynpUgn" name="st.h" compile="0" resource="0" file="../modules/simde/mips/msa/st.h"/>
+            <FILE id="FKTkc8" name="subv.h" compile="0" resource="0" file="../modules/simde/mips/msa/subv.h"/>
+            <FILE id="S3dOCD" name="types.h" compile="0" resource="0" file="../modules/simde/mips/msa/types.h"/>
+          </GROUP>
+          <FILE id="ibu2HQ" name="msa.h" compile="0" resource="0" file="../modules/simde/mips/msa.h"/>
+        </GROUP>
+        <GROUP id="{9A104B7A-1C8E-494E-E4D5-34CEA78F84D4}" name="wasm">
+          <FILE id="Gty5jw" name="relaxed-simd.h" compile="0" resource="0" file="../modules/simde/wasm/relaxed-simd.h"/>
+          <FILE id="fpuzGf" name="simd128.h" compile="0" resource="0" file="../modules/simde/wasm/simd128.h"/>
+        </GROUP>
+        <GROUP id="{678958E8-11EC-3D2D-C7A3-848769BD3BFD}" name="x86">
+          <GROUP id="{5487791A-03CE-9A89-30FA-7BDD48C7A8EC}" name="avx512">
+            <FILE id="VpEAlc" name="2intersect.h" compile="0" resource="0" file="../modules/simde/x86/avx512/2intersect.h"/>
+            <FILE id="McXCyU" name="4dpwssd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/4dpwssd.h"/>
+            <FILE id="BYAkun" name="4dpwssds.h" compile="0" resource="0" file="../modules/simde/x86/avx512/4dpwssds.h"/>
+            <FILE id="sdgZxo" name="abs.h" compile="0" resource="0" file="../modules/simde/x86/avx512/abs.h"/>
+            <FILE id="axqfWF" name="add.h" compile="0" resource="0" file="../modules/simde/x86/avx512/add.h"/>
+            <FILE id="hXZb46" name="adds.h" compile="0" resource="0" file="../modules/simde/x86/avx512/adds.h"/>
+            <FILE id="EXetBJ" name="and.h" compile="0" resource="0" file="../modules/simde/x86/avx512/and.h"/>
+            <FILE id="SrosYM" name="andnot.h" compile="0" resource="0" file="../modules/simde/x86/avx512/andnot.h"/>
+            <FILE id="VBhXOA" name="avg.h" compile="0" resource="0" file="../modules/simde/x86/avx512/avg.h"/>
+            <FILE id="xSD7oF" name="bitshuffle.h" compile="0" resource="0" file="../modules/simde/x86/avx512/bitshuffle.h"/>
+            <FILE id="a0O5NH" name="blend.h" compile="0" resource="0" file="../modules/simde/x86/avx512/blend.h"/>
+            <FILE id="hITnl2" name="broadcast.h" compile="0" resource="0" file="../modules/simde/x86/avx512/broadcast.h"/>
+            <FILE id="u5TvHP" name="cast.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cast.h"/>
+            <FILE id="ybGKz1" name="cmp.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmp.h"/>
+            <FILE id="m19wGy" name="cmpeq.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmpeq.h"/>
+            <FILE id="D8Bfws" name="cmpge.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmpge.h"/>
+            <FILE id="V6Sp5B" name="cmpgt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmpgt.h"/>
+            <FILE id="xWMkip" name="cmple.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmple.h"/>
+            <FILE id="E2R0Um" name="cmplt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmplt.h"/>
+            <FILE id="y8yIX8" name="cmpneq.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cmpneq.h"/>
+            <FILE id="HkCFAL" name="compress.h" compile="0" resource="0" file="../modules/simde/x86/avx512/compress.h"/>
+            <FILE id="iihJah" name="conflict.h" compile="0" resource="0" file="../modules/simde/x86/avx512/conflict.h"/>
+            <FILE id="JIdwcW" name="copysign.h" compile="0" resource="0" file="../modules/simde/x86/avx512/copysign.h"/>
+            <FILE id="qRT3tC" name="cvt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cvt.h"/>
+            <FILE id="DaEYKd" name="cvts.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cvts.h"/>
+            <FILE id="Ivw6aL" name="cvtt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/cvtt.h"/>
+            <FILE id="nLBcbZ" name="dbsad.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dbsad.h"/>
+            <FILE id="EGVizX" name="div.h" compile="0" resource="0" file="../modules/simde/x86/avx512/div.h"/>
+            <FILE id="ugwJHb" name="dpbf16.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dpbf16.h"/>
+            <FILE id="LCnMst" name="dpbusd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dpbusd.h"/>
+            <FILE id="GaWEXt" name="dpbusds.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dpbusds.h"/>
+            <FILE id="sW21Yp" name="dpwssd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dpwssd.h"/>
+            <FILE id="mezkls" name="dpwssds.h" compile="0" resource="0" file="../modules/simde/x86/avx512/dpwssds.h"/>
+            <FILE id="k3uPTH" name="expand.h" compile="0" resource="0" file="../modules/simde/x86/avx512/expand.h"/>
+            <FILE id="MQw9Ss" name="extract.h" compile="0" resource="0" file="../modules/simde/x86/avx512/extract.h"/>
+            <FILE id="ckFt3P" name="fixupimm.h" compile="0" resource="0" file="../modules/simde/x86/avx512/fixupimm.h"/>
+            <FILE id="OYQhEO" name="fixupimm_round.h" compile="0" resource="0"
+                  file="../modules/simde/x86/avx512/fixupimm_round.h"/>
+            <FILE id="FGNWQM" name="flushsubnormal.h" compile="0" resource="0"
+                  file="../modules/simde/x86/avx512/flushsubnormal.h"/>
+            <FILE id="f51VBA" name="fmadd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/fmadd.h"/>
+            <FILE id="fZSpfJ" name="fmsub.h" compile="0" resource="0" file="../modules/simde/x86/avx512/fmsub.h"/>
+            <FILE id="xuQbG9" name="fnmadd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/fnmadd.h"/>
+            <FILE id="ruAqpo" name="fnmsub.h" compile="0" resource="0" file="../modules/simde/x86/avx512/fnmsub.h"/>
+            <FILE id="U2d8pL" name="insert.h" compile="0" resource="0" file="../modules/simde/x86/avx512/insert.h"/>
+            <FILE id="Usoaah" name="kshift.h" compile="0" resource="0" file="../modules/simde/x86/avx512/kshift.h"/>
+            <FILE id="Ozlk8q" name="load.h" compile="0" resource="0" file="../modules/simde/x86/avx512/load.h"/>
+            <FILE id="JiuouW" name="loadu.h" compile="0" resource="0" file="../modules/simde/x86/avx512/loadu.h"/>
+            <FILE id="MmB6OA" name="lzcnt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/lzcnt.h"/>
+            <FILE id="Cp98jo" name="madd.h" compile="0" resource="0" file="../modules/simde/x86/avx512/madd.h"/>
+            <FILE id="NJdXBB" name="maddubs.h" compile="0" resource="0" file="../modules/simde/x86/avx512/maddubs.h"/>
+            <FILE id="oAeHAY" name="max.h" compile="0" resource="0" file="../modules/simde/x86/avx512/max.h"/>
+            <FILE id="GHYowr" name="min.h" compile="0" resource="0" file="../modules/simde/x86/avx512/min.h"/>
+            <FILE id="kv9fqE" name="mov.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mov.h"/>
+            <FILE id="kmwHQs" name="mov_mask.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mov_mask.h"/>
+            <FILE id="DVCeWE" name="movm.h" compile="0" resource="0" file="../modules/simde/x86/avx512/movm.h"/>
+            <FILE id="dWJX6J" name="mul.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mul.h"/>
+            <FILE id="Q4GZuj" name="mulhi.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mulhi.h"/>
+            <FILE id="Vgm9L1" name="mulhrs.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mulhrs.h"/>
+            <FILE id="b3MR3G" name="mullo.h" compile="0" resource="0" file="../modules/simde/x86/avx512/mullo.h"/>
+            <FILE id="SDYNVh" name="multishift.h" compile="0" resource="0" file="../modules/simde/x86/avx512/multishift.h"/>
+            <FILE id="AhbsNP" name="negate.h" compile="0" resource="0" file="../modules/simde/x86/avx512/negate.h"/>
+            <FILE id="fT1ZUx" name="or.h" compile="0" resource="0" file="../modules/simde/x86/avx512/or.h"/>
+            <FILE id="zDNPz6" name="packs.h" compile="0" resource="0" file="../modules/simde/x86/avx512/packs.h"/>
+            <FILE id="aEu714" name="packus.h" compile="0" resource="0" file="../modules/simde/x86/avx512/packus.h"/>
+            <FILE id="yIl8fX" name="permutex2var.h" compile="0" resource="0" file="../modules/simde/x86/avx512/permutex2var.h"/>
+            <FILE id="lkyIbI" name="permutexvar.h" compile="0" resource="0" file="../modules/simde/x86/avx512/permutexvar.h"/>
+            <FILE id="G5byaB" name="popcnt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/popcnt.h"/>
+            <FILE id="lMlTjt" name="range.h" compile="0" resource="0" file="../modules/simde/x86/avx512/range.h"/>
+            <FILE id="QKzacO" name="range_round.h" compile="0" resource="0" file="../modules/simde/x86/avx512/range_round.h"/>
+            <FILE id="FoXuSf" name="rol.h" compile="0" resource="0" file="../modules/simde/x86/avx512/rol.h"/>
+            <FILE id="EIb1sK" name="rolv.h" compile="0" resource="0" file="../modules/simde/x86/avx512/rolv.h"/>
+            <FILE id="JZxQi9" name="ror.h" compile="0" resource="0" file="../modules/simde/x86/avx512/ror.h"/>
+            <FILE id="TKsOnK" name="rorv.h" compile="0" resource="0" file="../modules/simde/x86/avx512/rorv.h"/>
+            <FILE id="MwlH9r" name="round.h" compile="0" resource="0" file="../modules/simde/x86/avx512/round.h"/>
+            <FILE id="HjLsf6" name="roundscale.h" compile="0" resource="0" file="../modules/simde/x86/avx512/roundscale.h"/>
+            <FILE id="ivTdkC" name="roundscale_round.h" compile="0" resource="0"
+                  file="../modules/simde/x86/avx512/roundscale_round.h"/>
+            <FILE id="aKsuPz" name="sad.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sad.h"/>
+            <FILE id="gPMOOM" name="scalef.h" compile="0" resource="0" file="../modules/simde/x86/avx512/scalef.h"/>
+            <FILE id="YTXixQ" name="set.h" compile="0" resource="0" file="../modules/simde/x86/avx512/set.h"/>
+            <FILE id="MPXsHq" name="set1.h" compile="0" resource="0" file="../modules/simde/x86/avx512/set1.h"/>
+            <FILE id="d34eGt" name="set4.h" compile="0" resource="0" file="../modules/simde/x86/avx512/set4.h"/>
+            <FILE id="B5pKGL" name="setone.h" compile="0" resource="0" file="../modules/simde/x86/avx512/setone.h"/>
+            <FILE id="Eo9Tx1" name="setr.h" compile="0" resource="0" file="../modules/simde/x86/avx512/setr.h"/>
+            <FILE id="f0NMJ7" name="setr4.h" compile="0" resource="0" file="../modules/simde/x86/avx512/setr4.h"/>
+            <FILE id="Xe53S9" name="setzero.h" compile="0" resource="0" file="../modules/simde/x86/avx512/setzero.h"/>
+            <FILE id="sXqhZ9" name="shldv.h" compile="0" resource="0" file="../modules/simde/x86/avx512/shldv.h"/>
+            <FILE id="Lg2DNp" name="shuffle.h" compile="0" resource="0" file="../modules/simde/x86/avx512/shuffle.h"/>
+            <FILE id="Ul0nAL" name="sll.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sll.h"/>
+            <FILE id="RVOSjg" name="slli.h" compile="0" resource="0" file="../modules/simde/x86/avx512/slli.h"/>
+            <FILE id="bqgS67" name="sllv.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sllv.h"/>
+            <FILE id="k975Uh" name="sqrt.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sqrt.h"/>
+            <FILE id="BPwHM8" name="sra.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sra.h"/>
+            <FILE id="lwccm7" name="srai.h" compile="0" resource="0" file="../modules/simde/x86/avx512/srai.h"/>
+            <FILE id="TZyWKf" name="srav.h" compile="0" resource="0" file="../modules/simde/x86/avx512/srav.h"/>
+            <FILE id="S4xoWS" name="srl.h" compile="0" resource="0" file="../modules/simde/x86/avx512/srl.h"/>
+            <FILE id="XsziZe" name="srli.h" compile="0" resource="0" file="../modules/simde/x86/avx512/srli.h"/>
+            <FILE id="EVqbDm" name="srlv.h" compile="0" resource="0" file="../modules/simde/x86/avx512/srlv.h"/>
+            <FILE id="DkPtDC" name="store.h" compile="0" resource="0" file="../modules/simde/x86/avx512/store.h"/>
+            <FILE id="Z7fAk0" name="storeu.h" compile="0" resource="0" file="../modules/simde/x86/avx512/storeu.h"/>
+            <FILE id="tGSHvV" name="sub.h" compile="0" resource="0" file="../modules/simde/x86/avx512/sub.h"/>
+            <FILE id="sTy4rg" name="subs.h" compile="0" resource="0" file="../modules/simde/x86/avx512/subs.h"/>
+            <FILE id="hbFn3w" name="ternarylogic.h" compile="0" resource="0" file="../modules/simde/x86/avx512/ternarylogic.h"/>
+            <FILE id="lnbaVm" name="test.h" compile="0" resource="0" file="../modules/simde/x86/avx512/test.h"/>
+            <FILE id="UVOocg" name="testn.h" compile="0" resource="0" file="../modules/simde/x86/avx512/testn.h"/>
+            <FILE id="u6gkbp" name="types.h" compile="0" resource="0" file="../modules/simde/x86/avx512/types.h"/>
+            <FILE id="sWVwzJ" name="unpackhi.h" compile="0" resource="0" file="../modules/simde/x86/avx512/unpackhi.h"/>
+            <FILE id="avbzmE" name="unpacklo.h" compile="0" resource="0" file="../modules/simde/x86/avx512/unpacklo.h"/>
+            <FILE id="cfRyJd" name="xor.h" compile="0" resource="0" file="../modules/simde/x86/avx512/xor.h"/>
+            <FILE id="ytx3hq" name="xorsign.h" compile="0" resource="0" file="../modules/simde/x86/avx512/xorsign.h"/>
+          </GROUP>
+          <FILE id="qvrOE2" name="avx.h" compile="0" resource="0" file="../modules/simde/x86/avx.h"/>
+          <FILE id="qc8ZvR" name="avx2.h" compile="0" resource="0" file="../modules/simde/x86/avx2.h"/>
+          <FILE id="Hkv6L3" name="avx512.h" compile="0" resource="0" file="../modules/simde/x86/avx512.h"/>
+          <FILE id="Oi8D4S" name="clmul.h" compile="0" resource="0" file="../modules/simde/x86/clmul.h"/>
+          <FILE id="msl839" name="f16c.h" compile="0" resource="0" file="../modules/simde/x86/f16c.h"/>
+          <FILE id="gwceoH" name="fma.h" compile="0" resource="0" file="../modules/simde/x86/fma.h"/>
+          <FILE id="vgHDHF" name="gfni.h" compile="0" resource="0" file="../modules/simde/x86/gfni.h"/>
+          <FILE id="M7Fs6l" name="mmx.h" compile="0" resource="0" file="../modules/simde/x86/mmx.h"/>
+          <FILE id="V6gNFt" name="sse.h" compile="0" resource="0" file="../modules/simde/x86/sse.h"/>
+          <FILE id="gdj8jj" name="sse2.h" compile="0" resource="0" file="../modules/simde/x86/sse2.h"/>
+          <FILE id="ABW19b" name="sse3.h" compile="0" resource="0" file="../modules/simde/x86/sse3.h"/>
+          <FILE id="f7OOlr" name="sse4.1.h" compile="0" resource="0" file="../modules/simde/x86/sse4.1.h"/>
+          <FILE id="FW5w14" name="sse4.2.h" compile="0" resource="0" file="../modules/simde/x86/sse4.2.h"/>
+          <FILE id="RKKljA" name="ssse3.h" compile="0" resource="0" file="../modules/simde/x86/ssse3.h"/>
+          <FILE id="jootlZ" name="svml.h" compile="0" resource="0" file="../modules/simde/x86/svml.h"/>
+          <FILE id="PS8H7z" name="xop.h" compile="0" resource="0" file="../modules/simde/x86/xop.h"/>
+        </GROUP>
+        <FILE id="LevZEE" name="check.h" compile="0" resource="0" file="../modules/simde/check.h"/>
+        <FILE id="zwAxPt" name="debug-trap.h" compile="0" resource="0" file="../modules/simde/debug-trap.h"/>
+        <FILE id="kUV4tJ" name="hedley.h" compile="0" resource="0" file="../modules/simde/hedley.h"/>
+        <FILE id="INo08o" name="simde-align.h" compile="0" resource="0" file="../modules/simde/simde-align.h"/>
+        <FILE id="XTylvW" name="simde-arch.h" compile="0" resource="0" file="../modules/simde/simde-arch.h"/>
+        <FILE id="mjMPSC" name="simde-common.h" compile="0" resource="0" file="../modules/simde/simde-common.h"/>
+        <FILE id="hmp7P8" name="simde-complex.h" compile="0" resource="0" file="../modules/simde/simde-complex.h"/>
+        <FILE id="eHvuC9" name="simde-constify.h" compile="0" resource="0"
+              file="../modules/simde/simde-constify.h"/>
+        <FILE id="zkZMJh" name="simde-detect-clang.h" compile="0" resource="0"
+              file="../modules/simde/simde-detect-clang.h"/>
+        <FILE id="nCxyGs" name="simde-diagnostic.h" compile="0" resource="0"
+              file="../modules/simde/simde-diagnostic.h"/>
+        <FILE id="I7EL2Q" name="simde-f16.h" compile="0" resource="0" file="../modules/simde/simde-f16.h"/>
+        <FILE id="x1NEGT" name="simde-features.h" compile="0" resource="0"
+              file="../modules/simde/simde-features.h"/>
+        <FILE id="SMk1P4" name="simde-math.h" compile="0" resource="0" file="../modules/simde/simde-math.h"/>
+      </GROUP>
       <FILE id="MCFCuy" name="AudioFFT.cpp" compile="1" resource="0" file="Source/AudioFFT.cpp"/>
       <FILE id="cPYyWP" name="AudioFFT.h" compile="0" resource="0" file="Source/AudioFFT.h"/>
       <FILE id="XoMad4" name="dwgs.cpp" compile="1" resource="0" file="Source/dwgs.cpp"/>

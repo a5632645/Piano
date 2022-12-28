@@ -19,7 +19,7 @@ float sum8(simde__m256 x) {
 }
 
 
-float sse_dot(int N, float *A, float *B) {
+float sse_dot(int N, float* A, float* B) {
     vec8 temp0 = {0};
     vec8 temp1 = {0};
     vec8 temp2 = {0};
