@@ -29,6 +29,8 @@ public:
 
     Piano piano;
 
+    juce::Array<const gin::Parameter*> params;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PianoAudioProcessor)
 };

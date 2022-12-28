@@ -24,14 +24,16 @@ enum {
     NumParams = 34
 };
 
-class Param {
+class Param
+{
 public:
     int tag;
     char name[64];
     char label[64];
 };
 
-class Value {
+class Value
+{
 public:
     operator float() const {
         return v;
@@ -177,6 +179,8 @@ public:
     //vst crap
     void setParameter (int32_t index, float value);
     float getParameter (int32_t index);
+
+    int USE_DWGS4 = 1;
 
 protected:     
     friend class PianoNote;

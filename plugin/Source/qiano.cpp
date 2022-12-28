@@ -6,7 +6,6 @@
 #include <string.h>
 
 #define HSTRING 1
-int USE_DWGS4 = 1;
 
 // The dwgs uses velocity waves dy/dt,  which reflect with -1
 // These wave directly interacts with the hammer
@@ -144,7 +143,7 @@ float PianoNote::goDownDelayed()
     if (tDown == 0)
     {
         alignas(32) float in[8];
-        if(USE_DWGS4 && hammer->isEscaped())
+        if(piano->USE_DWGS4 && hammer->isEscaped())
         {
             *((vec4*)in) = go4();
             *((vec4*)(in+4)) = go4();
@@ -372,41 +371,6 @@ void Piano::init (float Fs_, int blockSize_)
 #else
     soundboard = new ConvolveReverb<revSize>(blockSize);
 #endif
-
-    setParameter (pYoungsModulus, 0.5);
-    setParameter (pStringDensity, 0.5);
-    setParameter (pHammerMass, 0.5);
-    setParameter (pStringTension, 0.5);
-    setParameter (pStringLength, 0.25);
-    setParameter (pStringRadius, 0.25);
-    setParameter (pHammerCompliance, 0.5);
-    setParameter (pHammerSpringConstant, 0.5);
-    setParameter (pHammerHysteresis, 0.5);
-    setParameter (pHammerPosition, 0.5);
-    setParameter (pBridgeImpedance, 0.5);
-    setParameter (pBridgeHorizontalImpedance, 0.5);
-    setParameter (pVerticalHorizontalImpedance, 0.5);
-    setParameter (pSoundboardSize, 0.0);
-    setParameter (pStringDecay, 0.25);
-    setParameter (pStringLopass, 0.5);
-    setParameter (pDampedStringDecay, 0.5);
-    setParameter (pDampedStringLopass, 0.5);
-    setParameter (pSoundboardDecay, 0.5);
-    setParameter (pSoundboardLopass, 0.5);
-    setParameter (pLongitudinalGamma, 0.5);
-    setParameter (pLongitudinalGammaQuadratic, 0.0);
-    setParameter (pLongitudinalGammaDamped, 0.5);
-    setParameter (pLongitudinalGammaQuadraticDamped, 0.0);
-    setParameter (pLongitudinalMix, 0.5);
-    setParameter (pLongitudinalTransverseMix, 0.5);
-    setParameter (pVolume, 0.5);
-    setParameter (pMaxVelocity, 0.5);
-    setParameter (pStringDetuning, 0.5);
-    setParameter (pBridgeMass, 0.5);
-    setParameter (pBridgeSpring, 0.5);
-    setParameter (pDwgs4, 1);
-    setParameter (pDownsample, 0.0);
-    setParameter (pLongModes, 0.0);
 }
 
 Piano::Piano()
@@ -551,8 +515,10 @@ void PianoNote::triggerOn (float velocity, float* tune)
     float gammaL2 = v[pLongitudinalGammaQuadratic];
 
 
-    if(USE_DWGS4 && bInit4) {
-        for(int k=0;k<nstrings;k++) {
+    if (piano->USE_DWGS4 && bInit4)
+    {
+        for (int k=0;k<nstrings;k++)
+        {
             stringT[k]->init_string1();
 #ifdef HSTRING
             stringHT[k]->init_string1();
@@ -767,10 +733,13 @@ void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
     for (auto meta : midi)
     {
         auto m = meta.getMessage();
-        int nextDelta = int (m.getTimeStamp());
 
         if (! m.isNoteOnOrOff())
             continue;
+
+        int nextDelta = int (m.getTimeStamp());
+        nextDelta = std::min (nextDelta, sampleFrames);
+        process (outS, nextDelta - delta, delta);
 
         if (m.getNoteNumber() >= PIANO_MIN_NOTE && m.getNoteNumber() <= PIANO_MAX_NOTE)
         {
@@ -790,8 +759,6 @@ void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
             }
         }
 
-        nextDelta = std::min (nextDelta, sampleFrames);
-        process (outS, nextDelta - delta, delta);
         delta = nextDelta;
     }
 
@@ -811,7 +778,8 @@ void Piano::setParameter (int32_t index, float value)
     Value &p = vals[index];
     p.f = value;
 
-    switch(index) {
+    switch (index)
+    {
         case pYoungsModulus:
             p.v = 200 * exp (4.0f * (value - 0.5f));
             break;
@@ -852,10 +820,13 @@ void Piano::setParameter (int32_t index, float value)
             p.v = 0.05f + value * 0.15f;
             break;
         case pSoundboardSize:
-            p.v = value;
+            if (p.v != value)
+            {
+                p.v = value;
 #ifdef FDN_REVERB
-            soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
+                soundboard->set (vals[pSoundboardSize], vals[pSoundboardDecay], vals[pSoundboardLopass]);
 #endif
+            }
             break;
         case pStringDecay:
             p.v = 0.25f * exp (6.0f * (value - 0.25f));
@@ -870,17 +841,29 @@ void Piano::setParameter (int32_t index, float value)
             p.v = 25.0f * exp (6.0f * (value - 0.5f));
             break;
         case pSoundboardDecay:
-            p.v = 20.0f * exp (4.0f * (value - 0.5f));
+        {
+            auto n = 20.0f * exp (4.0f * (value - 0.5f));
+            if (std::abs (n - p.v) > 0.0001f)
+            {
+                p.v = n;
 #ifdef FDN_REVERB
-            soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
+                soundboard->set (vals[pSoundboardSize], vals[pSoundboardDecay], vals[pSoundboardLopass]);
 #endif
+            }
             break;
+        }
         case pSoundboardLopass:
-            p.v = 20.0f * exp (4.0f * (value - 0.5f));
+        {
+            auto n = 20.0f * exp (4.0f * (value - 0.5f));
+            if (std::abs (n - p.v) > 0.0001f)
+            {
+                p.v = n;
 #ifdef FDN_REVERB
-            soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
+                soundboard->set (vals[pSoundboardSize], vals[pSoundboardDecay], vals[pSoundboardLopass]);
 #endif
+            }
             break;
+        }
         case pLongitudinalGamma:
             p.v = 1e-2f * exp (10.0f * (value - 0.5f));
             break;
@@ -925,7 +908,6 @@ void Piano::setParameter (int32_t index, float value)
             p.v = 1 + lrintf(value);
             break;
     }
-
 }
 
 //-----------------------------------------------------------------------------------------
