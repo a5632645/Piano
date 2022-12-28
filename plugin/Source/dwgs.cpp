@@ -29,7 +29,7 @@ using namespace std;
 //#define DEBUG_4
 
 
-vec4 dwgs::tran2long4(int delay)
+vec4 dwgs::tran2long4 (int delay)
 {
     if(nLongModes == 0) {
         vec4 out = {0};

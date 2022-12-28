@@ -4,7 +4,6 @@
 //==============================================================================
 PianoAudioProcessor::PianoAudioProcessor()
 {
-    midiOut.ensureSize (1024);
 }
 
 PianoAudioProcessor::~PianoAudioProcessor()
@@ -44,7 +43,7 @@ void PianoAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 	buffer.clear ();
     auto numSamples = buffer.getNumSamples();
 
-	keyState.processNextMidiBuffer (midiOut, 0, numSamples, true);
+	keyState.processNextMidiBuffer (midi, 0, numSamples, true);
 
     auto ptr = (float**)buffer.getArrayOfWritePointers();
     piano.process (ptr, buffer.getNumSamples(), midi);

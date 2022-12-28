@@ -20,7 +20,7 @@ Reverb::Reverb (float Fs_)
     {
         o[k] = 0;
         b[k] = 1;
-        c[k] = k < ReverbTaps ? ((k%2==0) ? 0.5f / ReverbTaps : -0.5f / ReverbTaps) : 0.0f;
+        c[k] = k < ReverbTaps ? ((k % 2 == 0) ? 0.5f / ReverbTaps : -0.5f / ReverbTaps) : 0.0f;
     }
     out = 0.0;
 }

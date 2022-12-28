@@ -27,8 +27,6 @@ public:
 
     juce::MidiKeyboardState keyState;
 
-    juce::MidiBuffer midiOut;
-
     Piano piano;
 
     //==============================================================================

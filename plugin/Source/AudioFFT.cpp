@@ -82,7 +82,7 @@ void OouraFFT::init(size_t size)
 
     if (_size != size)
     {
-        _ip.resize(2 + static_cast<int>(std::sqrt(static_cast<double>(size))));
+        _ip.resize(2 + static_cast<size_t>(std::sqrt(static_cast<double>(size))));
         _w.resize(size / 2);
         _buffer.resize(size);
         _size = size;
