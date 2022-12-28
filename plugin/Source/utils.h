@@ -11,9 +11,8 @@
 #include "../../modules/simde/x86/sse3.h"
 #include "../../modules/simde/x86/svml.h"
 
-typedef float vec4 __attribute__ ((vector_size (sizeof(float) * 4)));
-typedef float vec8 __attribute__ ((vector_size (sizeof(float) * 8)));
-typedef float vec16 __attribute__ ((vector_size (sizeof(float) * 16)));
+typedef simde__m128 vec4;
+typedef simde__m256 vec8;
 
 #define HALFPI 1.5707963267948966192313216916398
 #define PI 3.1415926535897932384626433832795
