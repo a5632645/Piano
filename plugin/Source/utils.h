@@ -7,14 +7,9 @@
 #define vImage_Utilities_h
 #define vImage_CVUtilities_h
 
-#include <Accelerate/Accelerate.h>
-
-//#define logf(format, ...) fprintf(stderr,format,__VA_ARGS__)
-#define logf(format, ...) 
-
-#if defined(__i386__) || defined(__x86_64__)
-#include "immintrin.h"
-#endif
+#include "../../modules/simde/x86/avx.h"
+#include "../../modules/simde/x86/sse3.h"
+#include "../../modules/simde/x86/svml.h"
 
 typedef float vec4 __attribute__ ((vector_size (sizeof(float) * 4)));
 typedef float vec8 __attribute__ ((vector_size (sizeof(float) * 8)));
@@ -26,13 +21,12 @@ typedef float vec16 __attribute__ ((vector_size (sizeof(float) * 16)));
 
 std::ostream& operator<<(std::ostream& os, const vec4 &v);
 
-float dot(int N, float *A, float *B);
-float sum8(__m256 x);
-float sse_dot(int N, float *A, float *B);
-float dsp_dot(int N, float *A, float *B);
-float sum4(vec4 x);
-void ms4(float *x, float *y, float *z, int N);
-void diff4(float *x, float *y, int N);
+float dot (int N, float *A, float *B);
+float sum8 (simde__m256 x);
+float sse_dot (int N, float *A, float *B);
+float sum4 (vec4 x);
+void ms4 (float *x, float *y, float *z, int N);
+void diff4 (float *x, float *y, int N);
 
 static inline float square(float x)
 {

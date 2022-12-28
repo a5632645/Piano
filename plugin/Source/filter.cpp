@@ -199,8 +199,9 @@ vec4 Filter::filter4(vec4 in)
     float *x = this->xc - n;
     if(x < this->x) x += xskip;
 
-    _mm_store_ps(xc, in);
-    if(xc == this->x) _mm_store_ps(xend, in);
+    simde_mm_store_ps(xc, in);
+    if(xc == this->x)
+        simde_mm_store_ps(xend, in);
     xc+=4;
     if(xc>=xend) xc = this->x;
 
@@ -208,7 +209,7 @@ vec4 Filter::filter4(vec4 in)
 
     while(b <= bend) {
         if(x >= xend) x = this->x;
-        out = _mm_fmadd_ps(_mm_broadcast_ss(b), _mm_loadu_ps(x), out);
+        out = simde_mm_fmadd_ps(simde_mm_broadcast_ss(b), simde_mm_loadu_ps(x), out);
         b+=upsample;
         x+=upsample;
     }
@@ -218,9 +219,10 @@ vec4 Filter::filter4(vec4 in)
     float *y = this->yc - n;
     if(y < this->y) y += xskip;
 
-    while(a <= aend4) {
+    while(a <= aend4)
+    {
         if(y >= yend) y = this->y;
-        outa = _mm_fmadd_ps(_mm_broadcast_ss(a), _mm_loadu_ps(y), outa);
+        outa = simde_mm_fmadd_ps(simde_mm_broadcast_ss(a), simde_mm_loadu_ps(y), outa);
         a+=upsample;
         y+=upsample;
     }
@@ -229,17 +231,22 @@ vec4 Filter::filter4(vec4 in)
 
     y = yc - 4;
     if(y < this->y) y += xskip;
-    vec4 y4 = _mm_loadu_ps(y);
+    vec4 y4 = simde_mm_loadu_ps(y);
 
-    out = _mm_fmadd_ps(_mm_shuffle_ps(y4, y4, _MM_SHUFFLE(0,3,2,1)), a0, out);
-    out = _mm_fmadd_ps(_mm_shuffle_ps(y4, out, _MM_SHUFFLE(2,0,3,2)), a1, out);
-    out = _mm_fmadd_ps(_mm_shuffle_ps(y4, out, _MM_SHUFFLE(1,1,0,3)), a2, out);
-    out = _mm_fmadd_ps(_mm_shuffle_ps(out, out, _MM_SHUFFLE(0,0,0,0)), a3, out);
+    out = simde_mm_fmadd_ps (simde_mm_shuffle_ps (y4, y4, SIMDE_MM_SHUFFLE(0,3,2,1)), a0, out);
+    out = simde_mm_fmadd_ps (simde_mm_shuffle_ps (y4, out, SIMDE_MM_SHUFFLE(2,0,3,2)), a1, out);
+    out = simde_mm_fmadd_ps (simde_mm_shuffle_ps (y4, out, SIMDE_MM_SHUFFLE(1,1,0,3)), a2, out);
+    out = simde_mm_fmadd_ps (simde_mm_shuffle_ps (out, out, SIMDE_MM_SHUFFLE(0,0,0,0)), a3, out);
 
-    _mm_store_ps(yc, out);
-    if(yc == this->y) _mm_store_ps(yend, out);
-    yc+=4;
-    if(yc>=yend) yc = this->y;
+    simde_mm_store_ps(yc, out);
+
+    if (yc == this->y)
+        simde_mm_store_ps(yend, out);
+
+    yc += 4;
+
+    if (yc>=yend)
+        yc = this->y;
     
     return out;
 }
@@ -256,8 +263,9 @@ void Thiran::create(float D, int N, int upsample)
         return;
     }
     n = N*upsample;
-    memset(a,0,(n+1)*sizeof(float));
-    memset(b,0,(n+1)*sizeof(float));
+
+    memset (a, 0, (n+1) * sizeof(float));
+    memset (b, 0, (n+1) * sizeof(float));
 
     int choose = 1;
     for(int k=0;k<=N;k++) {
@@ -324,9 +332,10 @@ vec4 DWGResonator::go4(vec4 vin)
 {
     float out[4] __attribute__((aligned(32)));
     float in[4] __attribute__((aligned(32)));
-    _mm_store_ps(in, vin);
+    simde_mm_store_ps(in, vin);
 
-    for(int i=0; i<4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         float x1t = g * x1;
         float v = c * (x1t + x2);
         x1 = v - x2 + b1t * in[i];
@@ -334,7 +343,7 @@ vec4 DWGResonator::go4(vec4 vin)
         out[i] = x2;
     }
 
-    return _mm_load_ps(out);
+    return simde_mm_load_ps(out);
 }
 
 float DWGResonator::go(float in)
@@ -366,8 +375,8 @@ void MSD2Filter::filter(float in[2], float out[2])
 
 void MSD2Filter::filter4(vec4 in[2], vec4 out[2])
 {
-    out[0] = _mm_broadcast_ss(&f11) * in[0] + _mm_broadcast_ss(&f12) * in[1];
-    out[1] = _mm_broadcast_ss(&f21) * in[0] + _mm_broadcast_ss(&f22) * in[1];
+    out[0] = simde_mm_broadcast_ss(&f11) * in[0] + simde_mm_broadcast_ss(&f12) * in[1];
+    out[1] = simde_mm_broadcast_ss(&f21) * in[0] + simde_mm_broadcast_ss(&f22) * in[1];
 }
 
 void MSD2Filter::create(float Fs,
@@ -388,16 +397,24 @@ vec8 ResampleFIR::filter8(vec8 in)
     float *x = this->xc - (ResampleFilterSize - 1);
     if(x < this->x) x += xsize;
 
-    _mm256_store_ps(xc, in);
-    if(xc == this->x) _mm256_store_ps(xend, in);
-    xc+=8;
-    if(xc>=xend) xc = this->x;
+    simde_mm256_store_ps(xc, in);
+
+    if(xc == this->x)
+        simde_mm256_store_ps(xend, in);
+
+    xc += 8;
+
+    if (xc>=xend)
+        xc = this->x;
 
     vec8 out = {0};
 
-    while(b <= bend) {
-        if(x >= xend) x = this->x;
-        out = _mm256_fmadd_ps(_mm256_broadcast_ss(b), _mm256_loadu_ps(x), out);
+    while (b <= bend)
+    {
+        if (x >= xend)
+            x = this->x;
+
+        out = simde_mm256_fmadd_ps (simde_mm256_broadcast_ss (b), simde_mm256_loadu_ps (x), out);
         b++;
         x++;
     }
@@ -408,7 +425,7 @@ vec8 ResampleFIR::filter8(vec8 in)
 ResampleFIR::ResampleFIR()
 {
     xsize = ResampleFilterSize * 4;
-    memset(x,0,(xsize+16)*sizeof(float));
+    memset (x, 0, (xsize + 16) * sizeof (float));
     xc = x;
 
     bend = this->b + ResampleFilterSize - 1;

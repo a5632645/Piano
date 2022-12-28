@@ -95,14 +95,16 @@ vec4 dwgs::tran2long4(int delay)
         n = del0 + del2 + del4 + 5;
         if(n <= cur) {
             float *x1 = x + cur;
-            ms4(wave10,x1-n+1,wave,n);
+            ms4 (wave10, x1 - n + 1, wave, n);
 
             /*
              for(int i=0; i<n; i++) {
              wave1[i] = x1[-i];
              }
              */
-        } else {
+        }
+        else
+        {
             float *x1 = x + cur;
             ms4(wave10,x1-cur,wave,cur+1);
             /*
@@ -151,13 +153,13 @@ vec4 dwgs::tran2long4(int delay)
         out[j] = 0;
         for(int k=1; k<=nLongModes; k++) {
             float *tab = modeTable[k];
-            float F = sse_dot(delTab+4,tab,Fl);
-            float Fbl = longModeResonator[k].go(F);
+            float F = sse_dot (delTab + 4, tab, Fl);
+            float Fbl = longModeResonator[k].go (F);
             out[j] += Fbl;
         }
     }
 
-    return _mm_load_ps(out);
+    return simde_mm_load_ps(out);
 }
 
 dwgs::dwgs() :
@@ -212,10 +214,10 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
 
     float deltot = Fs/downsample/f*upsample;
-    this->omega = TWOPI / deltot;
+    this->omega = float (TWOPI) / deltot;
     dDispersion = M*dispersion[0].phasedelay(omega);
 
-    logf("hammer delay = %g\n", inpos*deltot);
+    //logf("hammer delay = %g\n", inpos*deltot);
     del0 = (int)(0.5 * (inpos*deltot));
     del1 = (int)((inpos*deltot) - 1.0);
     if(del1 < 2) abort();
@@ -236,15 +238,15 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
     float delHalf = 0.5f * deltot;
 
-    float delHammerHalf = 0.5 * inpos * deltot;
+    float delHammerHalf = 0.5f * inpos * deltot;
 
     dTop = delHalf - delHammerHalf - del2;
     dd = std::min(4, del2 - 1);
     dTop += dd;
     del2 -= dd;
-    logf("hammer = %g\n",dHammer);
-    logf("top = %g\n",dTop);
-    logf("dispersion(%g) = %g\n",omega,dDispersion);
+    //logf("hammer = %g\n",dHammer);
+    //logf("top = %g\n",dTop);
+    //logf("dispersion(%g) = %g\n",omega,dDispersion);
 
     del4 = (int)dTop;
 
@@ -264,7 +266,7 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
     float delta = dTop - (int)dTop;
     float delta2 = delHalf - delTab - delta;
 
-    logf("%d %d %d %d %g %g\n", del0, del1, del2, del3, delta, delta2);
+    //logf("%d %d %d %d %g %g\n", del0, del1, del2, del3, delta, delta2);
 
     posix_memalign((void**)&wave0,32,(delTab+8)*sizeof(float));
     posix_memalign((void**)&wave1,32,(delTab+8)*sizeof(float));
@@ -278,7 +280,7 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
     nLongModes = (int)(0.5f * Fs / downsample / longFreq1 - 0.5);
     nLongModes = (int)(0.5f * Fs / longmodes / longFreq1 - 0.5);
-    logf("nlongmodes = %d\n", nLongModes);
+    //logf("nlongmodes = %d\n", nLongModes);
     if(nLongModes >= nMaxLongModes) abort();
 
     //nLongModes = 1;
@@ -286,11 +288,11 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
     for(int k=1; k <= nLongModes; k++) {
         float omegak = float (TWOPI) * k * longFreq1 / (Fs * resample);
-        float gammak = gammaL * (1.0 + gammaL2 * k * k);
+        float gammak = gammaL * (1.0f + gammaL2 * k * k);
         fLong[k] = omegak / float (TWOPI);
         longModeResonator[k].create(omegak, gammak);
 
-        logf("fL%d=%g L%d/fT = %g\n",k,k*longFreq1,k,k*longFreq1/f );
+        //logf("fL%d=%g L%d/fT = %g\n",k,k*longFreq1,k,k*longFreq1/f );
 #ifdef LONGMODE_DEBUG
         printf("%g ",omegak);
 #endif
@@ -305,7 +307,7 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
                 float s = sin(d*n);
                 modeTable[k][i+3] = s;
             }
-            logf("maxd = %g/ %g\n",delTab+delta,delHalf);
+            //logf("maxd = %g/ %g\n",delTab+delta,delHalf);
             modeTable[k][0] = 0;
             modeTable[k][1] = 0;
             modeTable[k][2] = 0;
@@ -336,7 +338,7 @@ void dwgs::damper(float c1, float c3, float gammaL, float gammaL2, int nDamper)
         loss.create(f,c1,c3,(float)upsample/(float)downsample);
         float lowpassdelay = loss.phasedelay(omega);
         float dBottom = dBottomAndLoss - lowpassdelay;
-        logf("bottom = %g\n",dBottom);
+        //logf("bottom = %g\n",dBottom);
         fracDelayBottom.create(dBottom,std::min(5,(int)dBottom));
 
     } else {
@@ -490,8 +492,8 @@ float dwgs::go_soundboard(float load_h, float load_sb)
 
 void dwgs::init_string1()
 {
-    a0_4 = _mm_cvtss_f32(_mm_shuffle_ps(v0_4,v0_4,_MM_SHUFFLE(0,1,2,3)));
-    a0_3 = _mm_cvtss_f32(v0_2);
+    a0_4 = simde_mm_cvtss_f32 (simde_mm_shuffle_ps (v0_4, v0_4, SIMDE_MM_SHUFFLE (0, 1, 2, 3)));
+    a0_3 = simde_mm_cvtss_f32 (v0_2);
     a0_2 = a0_3;
     a1_2 = d1.probe();
     a1_3 = a1_2;
@@ -518,7 +520,7 @@ void dwgs::init_string4()
     a0_2 = a0_3;
     v[1] = a0_2;
 
-    v0_2 = _mm_blend_ps(_mm_load_ps(v), d2.probe4(), 12);
+    v0_2 = simde_mm_blend_ps (simde_mm_load_ps(v), d2.probe4(), 12);
     d1.backup();
 
 #ifdef DEBUG_4
@@ -716,7 +718,7 @@ float dwgs::tran2long(int delay)
     float Fbl = 0;
     for(int k=1; k<=nLongModes; k++) {
         float *tab = modeTable[k];
-        float F = sse_dot(delTab+4,tab,Fl);
+        float F = sse_dot (delTab + 4, tab, Fl);
 #ifdef LONGMODE_DEBUG
         cout << F << " ";
 #endif

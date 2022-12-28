@@ -9,11 +9,11 @@ float dot(int N, float *A, float *B) {
     return dot;
 }
 
-float sum8(__m256 x) {
+float sum8(simde__m256 x) {
     float sumAVX = 0;
-    __m256 hsum = _mm256_hadd_ps(x, x);
-    hsum = _mm256_add_ps(hsum, _mm256_permute2f128_ps(hsum, hsum, 0x1));
-    _mm_store_ss(&sumAVX, _mm_hadd_ps( _mm256_castps256_ps128(hsum), _mm256_castps256_ps128(hsum) ) );
+    simde__m256 hsum = simde_mm256_hadd_ps(x, x);
+    hsum = simde_mm256_add_ps (hsum, simde_mm256_permute2f128_ps (hsum, hsum, 0x1));
+    simde_mm_store_ss (&sumAVX, simde_mm_hadd_ps (simde_mm256_castps256_ps128 (hsum), simde_mm256_castps256_ps128 (hsum)));
 
     return sumAVX;
 }
@@ -45,17 +45,17 @@ float sse_dot(int N, float *A, float *B) {
         Bv1 = *(Bv+1);
         Bv2 = *(Bv+2);
         Bv3 = *(Bv+3);
-        temp0 = _mm256_fmadd_ps(*Av,Bv0,temp0);
-        temp1 = _mm256_fmadd_ps(*(Av+1),Bv1,temp1);
-        temp2 = _mm256_fmadd_ps(*(Av+2),Bv2,temp2);
-        temp3 = _mm256_fmadd_ps(*(Av+3),Bv3,temp3);
+        temp0 = simde_mm256_fmadd_ps(*Av,Bv0,temp0);
+        temp1 = simde_mm256_fmadd_ps(*(Av+1),Bv1,temp1);
+        temp2 = simde_mm256_fmadd_ps(*(Av+2),Bv2,temp2);
+        temp3 = simde_mm256_fmadd_ps(*(Av+3),Bv3,temp3);
 
         Av+=4;
         Bv+=4;
     }
 
     for(int i = 0; i < N8; i++) {
-        temp0 = _mm256_fmadd_ps(*Av,*Bv,temp0);
+        temp0 = simde_mm256_fmadd_ps(*Av,*Bv,temp0);
         Av++;
         Bv++;
     }
@@ -76,18 +76,11 @@ float sse_dot(int N, float *A, float *B) {
     return dot;
 }
 
-float dsp_dot(int N, float *A, float *B)
+float sum4 (vec4 x)
 {
-    float C;
-    //vDSP_dotpr(A,1,B,1,&C,N);
-    return C;
-}
-
-float sum4(vec4 x)
-{
-    x = _mm_hadd_ps(x,x);
-    x = _mm_hadd_ps(x,x);
-    return _mm_cvtss_f32(x);
+    x = simde_mm_hadd_ps (x, x);
+    x = simde_mm_hadd_ps (x, x);
+    return simde_mm_cvtss_f32 (x);
 }
 
 void ms4(float *x, float *y, float *z, int N)
@@ -100,10 +93,11 @@ void ms4(float *x, float *y, float *z, int N)
     vec4 v;
 
     y += N - 4;
-    while(z4 < zend) {
-        vec4 w = _mm_loadu_ps(y);
-        v = _mm_sub_ps(_mm_shuffle_ps(w,w,_MM_SHUFFLE(0,1,2,3)), *x4);
-        *z4 = _mm_mul_ps(v,v);
+    while (z4 < zend)
+    {
+        vec4 w = simde_mm_loadu_ps(y);
+        v = simde_mm_sub_ps (simde_mm_shuffle_ps (w, w, SIMDE_MM_SHUFFLE(0, 1, 2, 3)), *x4);
+        *z4 = simde_mm_mul_ps(v,v);
         x4++;
         y -= 4;
         z4++;
@@ -111,7 +105,7 @@ void ms4(float *x, float *y, float *z, int N)
 }
 
 // 0 0 0 x ...
-void diff4(float *x, float *y, int N)
+void diff4 (float *x, float *y, int N)
 {
     vec4 v0;
     vec4 v1;
@@ -122,8 +116,9 @@ void diff4(float *x, float *y, int N)
     y4++;
     int N4 = N >> 2;
     vec4 *yend = y4 + N4 ;
-    while(y4 < yend) {
-        *y4 = _mm_sub_ps(_mm_shuffle_ps(v0,*x4,_MM_SHUFFLE(1,0,3,2)), v0);
+    while (y4 < yend)
+    {
+        *y4 = simde_mm_sub_ps (simde_mm_shuffle_ps (v0, *x4, SIMDE_MM_SHUFFLE (1,0,3,2)), v0);
         v0 = *x4;
         x4++;
         y4++;

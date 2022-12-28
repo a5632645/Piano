@@ -47,7 +47,7 @@
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstLegacyFolder="../modules/plugin_sdk/vstsdk2.4"
-               extraCompilerFlags="-Wunused-value -mavx2 -mfma">
+               extraCompilerFlags="-Wunused-value">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" recommendedWarnings="LLVM" osxCompatibility="10.14 SDK"
                        macOSDeploymentTarget="10.14"/>

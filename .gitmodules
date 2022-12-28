@@ -7,3 +7,6 @@
 [submodule "modules/plugin_sdk"]
 	path = modules/plugin_sdk
 	url = git@github.com:TurnipHat/plugin_sdk.git
+[submodule "modules/simde"]
+	path = modules/simde
+	url = https://github.com/simd-everywhere/simde-no-tests.git
