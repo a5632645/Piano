@@ -49,12 +49,12 @@ void Filter::merge(const Filter &f)
     int n1 = n;
     n = n1 + f.n;
 
-    float *aa = (float*)malloc((n1+1)*sizeof(float));
-    float *bb = (float*)malloc((n1+1)*sizeof(float));
-    memcpy(aa,a,(n1+1)*sizeof(float));
-    memcpy(bb,b,(n1+1)*sizeof(float));
-    memset(a,0,(n+1)*sizeof(float));
-    memset(b,0,(n+1)*sizeof(float));
+    float* aa = (float*)malloc (size_t (n1 + 1) * sizeof(float));
+    float* bb = (float*)malloc (size_t (n1 + 1) * sizeof(float));
+    memcpy (aa, a, size_t (n1+1) * sizeof(float));
+    memcpy (bb, b, size_t (n1+1) * sizeof(float));
+    memset (a, 0, size_t (n+1) * sizeof(float));
+    memset (b, 0, size_t (n+1) * sizeof(float));
 
     for(int j=0;j<=n1;j++) {
         for(int k=0;k<=f.n;k++) {
@@ -68,16 +68,19 @@ void Filter::merge(const Filter &f)
     init(upsample);
 }
 
-float Db (float B, float f, int M)
+static float Db (float B, float f, int M)
 {
     float C1,C2,k1,k2,k3;
-    if(M==4) {
+    if (M == 4)
+    {
         C1 = 0.069618f;
         C2 = 2.0427f;
         k1 = -0.00050469f;
         k2 = -0.0064264f;
         k3 = -2.8743f;
-    } else {
+    }
+    else
+    {
         C1 = 0.071089f;
         C2 = 2.1074f;
         k1 = -0.0026580f;
@@ -90,7 +93,7 @@ float Db (float B, float f, int M)
     float Cd = exp(C1*logB+C2);
     float halfstep = pow (2.0f, 1.0f / 12.0f);
     float Ikey = log (f * halfstep / 27.5f) / log (halfstep);
-    float D = exp(Cd - Ikey*kd);
+    float D = exp (Cd - Ikey * kd);
     return D;
 }
 
@@ -103,15 +106,15 @@ Filter::Filter(int nmax_)
 {
     nmax = nmax_;
     int n4 = nmax / 4;
-    posix_memalign((void**)&b,32,(n4+3)*sizeof(vec4));
-    posix_memalign((void**)&a,32,(n4+3)*sizeof(vec4));
-    posix_memalign((void**)&x,32,2*(n4+3)*sizeof(vec4));
-    posix_memalign((void**)&y,32,2*(n4+3)*sizeof(vec4));
+    posix_memalign((void**)&b,32,size_t(n4+3)*sizeof(vec4));
+    posix_memalign((void**)&a,32,size_t(n4+3)*sizeof(vec4));
+    posix_memalign((void**)&x,32,2*size_t(n4+3)*sizeof(vec4));
+    posix_memalign((void**)&y,32,2*size_t(n4+3)*sizeof(vec4));
 
-    memset(x,0,2*(n4+3)*sizeof(vec4));
-    memset(y,0,2*(n4+3)*sizeof(vec4));
-    memset(b,0,(n4+3)*sizeof(vec4));
-    memset(a,0,(n4+3)*sizeof(vec4));
+    memset(x,0,2*size_t(n4+3)*sizeof(vec4));
+    memset(y,0,2*size_t(n4+3)*sizeof(vec4));
+    memset(b,0,size_t(n4+3)*sizeof(vec4));
+    memset(a,0,size_t(n4+3)*sizeof(vec4));
 
     int xsize = 2*4*(n4 + 2);
     xend = x + xsize;
@@ -264,8 +267,8 @@ void Thiran::create(float D, int N, int upsample)
     }
     n = N*upsample;
 
-    memset (a, 0, (n+1) * sizeof(float));
-    memset (b, 0, (n+1) * sizeof(float));
+    memset (a, 0, size_t (n+1) * sizeof(float));
+    memset (b, 0, size_t (n+1) * sizeof(float));
 
     int choose = 1;
     for(int k=0;k<=N;k++) {
@@ -289,7 +292,8 @@ void ThiranDispersion::create(float B, float f, int M, int downsample, int upsam
     D = Db(B,f,M);
     D /= downsample;
 
-    if(D<=1.0) {
+    if(D<=1.0)
+    {
         n = 2*upsample;
         a[0] = -1;
         a[upsample] = 0;
@@ -298,8 +302,10 @@ void ThiranDispersion::create(float B, float f, int M, int downsample, int upsam
         b[upsample] = 0;
         b[2*upsample] = 0;
         init(upsample);
-    } else {
-        Thiran::create(D,N,upsample);
+    }
+    else
+    {
+        Thiran::create (D,N,upsample);
     }
 }
 
@@ -385,10 +391,10 @@ void MSD2Filter::create(float Fs,
                         float R12, float k12, float Zn, float Z)
 {
     float det = (R1 + Zn) * (R2 + Zn) - R12 * R12;
-    f11 = 2.0 * Z * (R2 + Zn) / det;
-    f12 = -2.0 * Z * R12 / det;
-    f21 = -2.0 * Z * R12 / det;
-    f22 = 2.0 * Z * (R1 + Zn) / det;
+    f11 = 2.0f * Z * (R2 + Zn) / det;
+    f12 = -2.0f * Z * R12 / det;
+    f21 = -2.0f * Z * R12 / det;
+    f22 = 2.0f * Z * (R1 + Zn) / det;
 }
 
 vec8 ResampleFIR::filter8(vec8 in)
@@ -425,7 +431,7 @@ vec8 ResampleFIR::filter8(vec8 in)
 ResampleFIR::ResampleFIR()
 {
     xsize = ResampleFilterSize * 4;
-    memset (x, 0, (xsize + 16) * sizeof (float));
+    memset (x, 0, size_t (xsize + 16) * sizeof (float));
     xc = x;
 
     bend = this->b + ResampleFilterSize - 1;

@@ -118,23 +118,26 @@ public:
         clear();
     }
 
-    void setDelay (int di)
+    void setDelay (int di_)
     {
-        this->di = di;
+        di = di_;
         d1 = (cursor+size-di)&(mask);
     }
 
-    void clear() {
+    void clear()
+    {
         memset(x_,0,(size+16)*sizeof(float));
     }
 
-    float probe() {
+    float probe()
+    {
         float y0;
         y0 = x[d1];
         return y0;
     }
 
-    float goDelay(float in) {
+    float goDelay(float in)
+    {
         float y0;
         x[cursor] = in;
         if(cursor <= 3) {
@@ -146,23 +149,26 @@ public:
         return y0;
     }
 
-    vec4 probe4() {
-
+    vec4 probe4()
+    {
         float out[4] __attribute__((aligned(32)));
-        for(int i=2; i<4; i++) {
+        for(int i=2; i<4; i++)
+        {
             int d = d1 + i - 2;
             out[i] = x[(d + size) & mask];
         }
         d1 = (d1 + 2) & mask;
 
-        return simde_mm_load_ps(out);
+        return simde_mm_load_ps (out);
     }
 
-    void backup() {
+    void backup()
+    {
         d1 = (d1 - 1 + size) & mask;
     }
 
-    void backupCursor() {
+    void backupCursor()
+    {
         cursor = (cursor - 1 + size) & mask;
     }
 

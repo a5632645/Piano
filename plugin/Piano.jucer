@@ -11,8 +11,6 @@
     <GROUP id="{0CE63D98-F319-7656-21CD-D7A21B4A4B6C}" name="Source">
       <FILE id="MCFCuy" name="AudioFFT.cpp" compile="1" resource="0" file="Source/AudioFFT.cpp"/>
       <FILE id="cPYyWP" name="AudioFFT.h" compile="0" resource="0" file="Source/AudioFFT.h"/>
-      <FILE id="IS6Ujz" name="config.h" compile="0" resource="0" file="Source/config.h"/>
-      <FILE id="aS9wis" name="config.h.in" compile="0" resource="1" file="Source/config.h.in"/>
       <FILE id="XoMad4" name="dwgs.cpp" compile="1" resource="0" file="Source/dwgs.cpp"/>
       <FILE id="O9ngaL" name="dwgs.h" compile="0" resource="0" file="Source/dwgs.h"/>
       <FILE id="gJXTzm" name="fft.cpp" compile="1" resource="0" file="Source/fft.cpp"/>

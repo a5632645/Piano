@@ -84,8 +84,8 @@ void PianoNote::fillFrequencyTable() {
 
 float PianoNote::goUp()
 {
-    float out;
-    while(upSampleDelayNeeded) {
+    while (upSampleDelayNeeded)
+    {
         goUpDelayed();
         upSampleDelayNeeded--;
     }
@@ -95,8 +95,8 @@ float PianoNote::goUp()
 
 float PianoNote::goUpDelayed()
 {
-
-    if(tUp == 0) {
+    if (tUp == 0)
+    {
         float in[8] __attribute__((aligned(32)));
         for(int i=0; i<8; i++) {
             if(i&1) {
@@ -120,7 +120,8 @@ float PianoNote::goUpDelayed()
 
 float PianoNote::goDown()
 {
-    while(downSampleDelayNeeded) {
+    while(downSampleDelayNeeded)
+    {
         goDownDelayed();
         downSampleDelayNeeded--;
     }
@@ -321,62 +322,67 @@ void Piano::removeVoice(PianoNote *v)
     n->prev = p;
 }
 
-void Piano::init(float Fs_, int blockSize_)
+void Piano::init (float Fs_, int blockSize_)
 {
-    this->Fs = Fs_;
+    Fs = Fs_;
     blockSize = blockSize_;
-    voiceList = NULL;
+    voiceList = nullptr;
     PianoNote::fillFrequencyTable();
-    for(int k=PIANO_MIN_NOTE; k<=PIANO_MAX_NOTE;k++) {
+
+    for (int k = PIANO_MIN_NOTE; k <= PIANO_MAX_NOTE; k++)
+    {
         if(noteArray[k]) delete noteArray[k];
-        noteArray[k] = new PianoNote(k,Fs,this);
+        noteArray[k] = new PianoNote(k, Fs, this);
     }
 
-    if(input) delete input;
+    if (input)
+        delete input;
+
     input = new float[blockSize];
 
+    if (soundboard)
+        delete soundboard;
 
-    if(soundboard) delete soundboard;
 #ifdef FDN_REVERB
-    soundboard = new Reverb(Fs);
+    soundboard = new Reverb (Fs);
 #else
     soundboard = new ConvolveReverb<revSize>(blockSize);
 #endif
 
-    setParameter(pYoungsModulus, 0.5);
-    setParameter(pStringDensity, 0.5);
-    setParameter(pHammerMass, 0.5);
-    setParameter(pStringTension, 0.5);
-    setParameter(pStringLength, 0.25);
-    setParameter(pStringRadius, 0.25);
-    setParameter(pHammerCompliance, 0.5);
-    setParameter(pHammerSpringConstant, 0.5);
-    setParameter(pHammerHysteresis, 0.5);
-    setParameter(pHammerPosition, 0.5);
-    setParameter(pBridgeImpedance, 0.5);
-    setParameter(pBridgeHorizontalImpedance, 0.5);
-    setParameter(pVerticalHorizontalImpedance, 0.5);
-    setParameter(pSoundboardSize, 0.0);
-    setParameter(pStringDecay, 0.25);
-    setParameter(pStringLopass, 0.5);
-    setParameter(pDampedStringDecay, 0.5);
-    setParameter(pDampedStringLopass, 0.5);
-    setParameter(pSoundboardDecay, 0.5);
-    setParameter(pSoundboardLopass, 0.5);
-    setParameter(pLongitudinalGamma, 0.5);
-    setParameter(pLongitudinalGammaQuadratic, 0.0);
-    setParameter(pLongitudinalGammaDamped, 0.5);
-    setParameter(pLongitudinalGammaQuadraticDamped, 0.0);
-    setParameter(pLongitudinalMix, 0.5);
-    setParameter(pLongitudinalTransverseMix, 0.5);
-    setParameter(pVolume, 0.5);
-    setParameter(pMaxVelocity, 0.5);
-    setParameter(pStringDetuning, 0.5);
-    setParameter(pBridgeMass, 0.5);
-    setParameter(pBridgeSpring, 0.5);
-    setParameter(pDwgs4, 1);
-    setParameter(pDownsample, 0.0);
-    setParameter(pLongModes, 0.0);
+    setParameter (pYoungsModulus, 0.5);
+    setParameter (pStringDensity, 0.5);
+    setParameter (pHammerMass, 0.5);
+    setParameter (pStringTension, 0.5);
+    setParameter (pStringLength, 0.25);
+    setParameter (pStringRadius, 0.25);
+    setParameter (pHammerCompliance, 0.5);
+    setParameter (pHammerSpringConstant, 0.5);
+    setParameter (pHammerHysteresis, 0.5);
+    setParameter (pHammerPosition, 0.5);
+    setParameter (pBridgeImpedance, 0.5);
+    setParameter (pBridgeHorizontalImpedance, 0.5);
+    setParameter (pVerticalHorizontalImpedance, 0.5);
+    setParameter (pSoundboardSize, 0.0);
+    setParameter (pStringDecay, 0.25);
+    setParameter (pStringLopass, 0.5);
+    setParameter (pDampedStringDecay, 0.5);
+    setParameter (pDampedStringLopass, 0.5);
+    setParameter (pSoundboardDecay, 0.5);
+    setParameter (pSoundboardLopass, 0.5);
+    setParameter (pLongitudinalGamma, 0.5);
+    setParameter (pLongitudinalGammaQuadratic, 0.0);
+    setParameter (pLongitudinalGammaDamped, 0.5);
+    setParameter (pLongitudinalGammaQuadraticDamped, 0.0);
+    setParameter (pLongitudinalMix, 0.5);
+    setParameter (pLongitudinalTransverseMix, 0.5);
+    setParameter (pVolume, 0.5);
+    setParameter (pMaxVelocity, 0.5);
+    setParameter (pStringDetuning, 0.5);
+    setParameter (pBridgeMass, 0.5);
+    setParameter (pBridgeSpring, 0.5);
+    setParameter (pDwgs4, 1);
+    setParameter (pDownsample, 0.0);
+    setParameter (pLongModes, 0.0);
 }
 
 Piano::Piano()
@@ -471,7 +477,7 @@ void PianoNote::triggerOn(float velocity, float* tune)
     float r = 0.008f * pow ((float)(3.0f + 1.5f * log (f / f0)), (float)-1.4f);
     r *= v[pStringRadius];
 
-    float S = PI * r * r;
+    float S = float (PI) * r * r;
     mu = S*v[pStringDensity];
 
     T = (2*L*f)*(2*L*f)*mu;
@@ -480,11 +486,11 @@ void PianoNote::triggerOn(float velocity, float* tune)
 
     float rcore = (r < 0.0006f) ? r : 0.0006f;
 
-    float Score = PI * rcore * rcore;
+    float Score = float (PI) * rcore * rcore;
     float mucore = Score * v[pStringDensity];
     Z = sqrt(T*mu);
-    float E = v[pYoungsModulus] * 1e9;
-    float B = (PI*PI*PI)*E*(rcore*rcore*rcore*rcore)/(4.0*L*L*T);
+    float E = v[pYoungsModulus] * 1e9f;
+    float B = float (PI*PI*PI) * E * (rcore*rcore*rcore*rcore)/(4.0f*L*L*T);
     //B *= 5;
     //B = 1e-6;
 
@@ -497,12 +503,12 @@ void PianoNote::triggerOn(float velocity, float* tune)
     //float Zlong = sqrt(E*S*mu);
     float Zlong = sqrt(E*Score*mucore);
 
-    Z2i = 1.0/(2*Z);
-    alphasb = (2*Z)/(Z*nstrings + v[pBridgeImpedance]);
+    Z2i = 1.0f / (2 * Z);
+    alphasb = (2 * Z) / (Z * nstrings + v[pBridgeImpedance]);
 
     float Zb = v[pBridgeImpedance];
     float hp = v[pHammerPosition];
-    hp = hp / (1 + .01 * square(log(f/f0)));
+    hp = hp / (1 + 0.01f * square (log (f / f0)));
     //hp = .0081/L;
 
 
@@ -514,9 +520,7 @@ void PianoNote::triggerOn(float velocity, float* tune)
 
     float ZbH = v[pBridgeHorizontalImpedance];
     float Zhv = v[pVerticalHorizontalImpedance];
-    float khv = kBridge * 0.;
-
-
+    float khv = kBridge * 0.0f;
 
     float ES = E*S;
     float gammaL = v[pLongitudinalGamma];
@@ -534,8 +538,8 @@ void PianoNote::triggerOn(float velocity, float* tune)
     bInit4 = false;
 
     int upsampleMin = 1;
-    int downsample = lrintf(v[pDownsample]);
-    int longmodes = lrintf(v[pLongModes]);
+    int downsample = (int)lrintf(v[pDownsample]);
+    int longmodes = (int)lrintf(v[pLongModes]);
 
     longmodes = 2;
     /*
@@ -604,20 +608,23 @@ void PianoNote::triggerOn(float velocity, float* tune)
 
     tranBridgeForce = Z;
     longBridgeForce = Zlong*square(vLong/vTran) / L / (Fs * resample) * nstrings;
-    longTranBridgeForce = 0.5 * Zlong * (vLong / vTran) / vTran;
+    longTranBridgeForce = 0.5f * Zlong * (vLong / vTran) / vTran;
 
     tranBridgeForce /= resample;
     longBridgeForce /= resample;
     longTranBridgeForce /= resample;
 
     outputdelay.clear();
-    longHP.create(0.15*downsample,0.5);
+    longHP.create (0.15f * downsample, 0.5f);
 
     // XXX should only create once
-    if(downSampleFilter.isCreated()) {
+    if(downSampleFilter.isCreated())
+    {
         upSampleDelayNeeded = 0;
         downSampleDelayNeeded = 0;
-    } else {
+    }
+    else
+    {
         downSampleFilter.create(upsample);
         upSampleFilter.create(downsample);
         upSampleDelayNeeded = upSampleFilter.getDelay();
@@ -651,17 +658,21 @@ bool PianoNote::isActive()
     return bActive;
 }
 
-PianoNote::~PianoNote() {
-    for(int k=0;k<nstrings;k++) {
+PianoNote::~PianoNote()
+{
+    for (int k=0;k<nstrings;k++)
+    {
         delete stringT[k];
         delete stringHT[k];
     }
     delete hammer;
 }
 
-Piano::~Piano() {
-    for(int k=PIANO_MIN_NOTE;k<=PIANO_MAX_NOTE;k++)
+Piano::~Piano()
+{
+    for (int k=PIANO_MIN_NOTE;k<=PIANO_MAX_NOTE;k++)
         delete noteArray[k];
+
     delete input;
     delete soundboard;
 }
@@ -676,6 +687,7 @@ void Piano::process (float *out, int samples)
         {
             if (v)
                 output += v->goUp();
+
         } while (v && (v=v->next) && (v != voiceList));
 #ifdef FDN_REVERB
         out[i] = vals[pVolume] * soundboard->reverb(output);
@@ -691,13 +703,13 @@ void Piano::process (float *out, int samples)
 #endif
 }
 
-void Piano::process (float **in, float **out, int samples, int offset)
+void Piano::process (float **out, int samples, int offset)
 {
     process (out[0] + offset, samples);
-    memcpy (out[1] + offset, out[0] + offset, samples * sizeof (float));
+    memcpy (out[1] + offset, out[0] + offset, size_t (samples) * sizeof (float));
 }
 
-void Piano::process (float** inS, float** outS, int sampleFrames, juce::MidiBuffer& midi)
+void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
 { 
     int delta = 0;
 
@@ -705,7 +717,6 @@ void Piano::process (float** inS, float** outS, int sampleFrames, juce::MidiBuff
     PianoNote* remove[NUM_NOTES];
 
     int k = 0;
-    int n = 0;
 
     do
     {
@@ -722,7 +733,7 @@ void Piano::process (float** inS, float** outS, int sampleFrames, juce::MidiBuff
     for (auto meta : midi)
     {
         auto m = meta.getMessage();
-        int nextDelta = m.getTimeStamp();
+        int nextDelta = int (m.getTimeStamp());
 
         if (! m.isNoteOnOrOff())
             continue;
@@ -746,18 +757,18 @@ void Piano::process (float** inS, float** outS, int sampleFrames, juce::MidiBuff
         }
 
         nextDelta = std::min (nextDelta, sampleFrames);
-        process (inS, outS, nextDelta - delta, delta);
+        process (outS, nextDelta - delta, delta);
         delta = nextDelta;
     }
 
-    process (inS, outS, sampleFrames - delta, delta);
+    process (outS, sampleFrames - delta, delta);
 }
 
-void Piano::triggerOn (int note, float velocity, float *tune)
+void Piano::triggerOn (int note, float velocity, float* tune)
 {
-    PianoNote *v = noteArray[note];
-    addVoice(v);
-    v->triggerOn(velocity,tune);
+    PianoNote* v = noteArray[note];
+    addVoice (v);
+    v->triggerOn (velocity,tune);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -768,43 +779,43 @@ void Piano::setParameter (int32_t index, float value)
 
     switch(index) {
         case pYoungsModulus:
-            p.v = 200 * exp (4.0 * (value - 0.5));
+            p.v = 200 * exp (4.0f * (value - 0.5f));
             break;
         case pStringDensity:
-            p.v = 7850 * exp (4.0 * (value - 0.5));
+            p.v = 7850 * exp (4.0f * (value - 0.5f));
             break;
         case pHammerMass:
-            p.v = exp (4.0 * (value - 0.5));
+            p.v = exp (4.0f * (value - 0.5f));
             break;
         case pStringTension:
-            p.v = 800.0 * exp (3.0 * (value - 0.5));
+            p.v = 800.0f * exp (3.0f * (value - 0.5f));
             break;
         case pStringLength:
-            p.v = exp (2.0 * (value - 0.25));
+            p.v = exp (2.0f * (value - 0.25f));
             break;
         case pStringRadius:
-            p.v = exp (2.0 * (value - 0.25));
+            p.v = exp (2.0f * (value - 0.25f));
             break;
         case pHammerCompliance:
-            p.v = 2.0 * value;
+            p.v = 2.0f * value;
             break;
         case pHammerSpringConstant:
-            p.v = (2.0 * value);
+            p.v = (2.0f * value);
             break;
         case pHammerHysteresis:
-            p.v = exp (4.0 * (value-0.5));
+            p.v = exp (4.0f * (value - 0.5f));
             break;
         case pBridgeImpedance:
-            p.v = 8000.0 * exp (12.0 * (value - 0.5));
+            p.v = 8000.0f * exp (12.0f * (value - 0.5f));
             break;
         case pBridgeHorizontalImpedance:
-            p.v = 60000.0 * exp (12.0 * (value - 0.5));
+            p.v = 60000.0f * exp (12.0f * (value - 0.5f));
             break;
         case pVerticalHorizontalImpedance:
-            p.v = 400.0 * exp (12.0 * (value - 0.5));
+            p.v = 400.0f * exp (12.0f * (value - 0.5f));
             break;
         case pHammerPosition:
-            p.v = .05 + value * 0.15;
+            p.v = 0.05f + value * 0.15f;
             break;
         case pSoundboardSize:
             p.v = value;
@@ -813,65 +824,65 @@ void Piano::setParameter (int32_t index, float value)
 #endif
             break;
         case pStringDecay:
-            p.v = 0.25 * exp (6.0 * (value - 0.25));
+            p.v = 0.25f * exp (6.0f * (value - 0.25f));
             break;
         case pStringLopass:
-            p.v = 5.85 * exp (6.0 * (value - 0.5));
+            p.v = 5.85f * exp (6.0f * (value - 0.5f));
             break;
         case pDampedStringDecay:
-            p.v = 8.0 * exp (6.0 * (value - 0.5));
+            p.v = 8.0f * exp (6.0f * (value - 0.5f));
             break;
         case pDampedStringLopass:
-            p.v = 25.0 * exp (6.0 * (value - 0.5));
+            p.v = 25.0f * exp (6.0f * (value - 0.5f));
             break;
         case pSoundboardDecay:
-            p.v = 20.0 * exp (4.0 * (value - 0.5));
+            p.v = 20.0f * exp (4.0f * (value - 0.5f));
 #ifdef FDN_REVERB
             soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
 #endif
             break;
         case pSoundboardLopass:
-            p.v = 20.0 * exp(4.0 * (value - 0.5));
+            p.v = 20.0f * exp (4.0f * (value - 0.5f));
 #ifdef FDN_REVERB
             soundboard->set(vals[pSoundboardSize],vals[pSoundboardDecay],vals[pSoundboardLopass]);
 #endif
             break;
         case pLongitudinalGamma:
-            p.v = 1e-2 * exp (10.0 * (value - 0.5));
+            p.v = 1e-2f * exp (10.0f * (value - 0.5f));
             break;
         case pLongitudinalGammaQuadratic:
-            p.v = 1.0e-2 * exp (8.0 * (value - 0.5));
+            p.v = 1.0e-2f * exp (8.0f * (value - 0.5f));
             break;
         case pLongitudinalGammaDamped:
-            p.v = 5e-2 * exp (10.0 * (value - 0.5));
+            p.v = 5e-2f * exp (10.0f * (value - 0.5f));
             break;
         case pLongitudinalGammaQuadraticDamped:
-            p.v = 3.0e-2 * exp (8.0 * (value - 0.5));
+            p.v = 3.0e-2f * exp (8.0f * (value - 0.5f));
             break;
         case pLongitudinalMix:
-            p.v = (value==0.0)?0.0:1e0 * exp (16.0 * (value - 0.5));
+            p.v = (value == 0.0f) ? 0.0f : 1e0f * exp (16.0f * (value - 0.5f));
             break;
         case pLongitudinalTransverseMix:
-            p.v = (value==0.0)?0.0:1e0 * exp (16.0 * (value - 0.5));
+            p.v = (value == 0.0f) ? 0.0f : 1e0f * exp (16.0f * (value - 0.5f));
             break;
         case pVolume:
-            p.v = 5e-3 * exp (8.0 * (value - 0.5));
+            p.v = 5e-3f * exp (8.0f * (value - 0.5f));
             break;
         case pMaxVelocity:
-            p.v = 10 * exp (8.0 * (value - 0.5));
+            p.v = 10 * exp (8.0f * (value - 0.5f));
             break;
         case pStringDetuning:
-            p.v = 1.0 * exp (10.0 * (value - 0.5));
+            p.v = 1.0f * exp (10.0f * (value - 0.5f));
             break;
         case pBridgeMass:
-            p.v = 10.0 * exp (10.0 * (value - 0.5));
+            p.v = 10.0f * exp (10.0f * (value - 0.5f));
             break;
         case pBridgeSpring:
-            p.v = 1e5 * exp (20.0 * (value - 0.5));
+            p.v = 1e5f * exp (20.0f * (value - 0.5f));
             break;
         case pDwgs4:
-            p.v = lrintf(value);
-            USE_DWGS4 = lrintf(value);
+            p.v = lrintf (value);
+            USE_DWGS4 = int (lrintf (value));
             break;
         case pDownsample:
             p.v = 1 + lrintf(value);

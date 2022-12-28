@@ -83,7 +83,7 @@ vec4 dwgs::tran2long4(int delay)
         x = d2.x;
         cur = (d2.cursor + DelaySize - delay - 4 + j + del4) % DelaySize;
 
-        float *wave10 = wave0 + j;
+        float* wave10 = wave0 + j;
 #ifdef STRING_DEBUG
         for(int i=0; i<=delTab; i++) {
             printf("%g ",wave10[i]);
@@ -268,13 +268,13 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
     //logf("%d %d %d %d %g %g\n", del0, del1, del2, del3, delta, delta2);
 
-    posix_memalign((void**)&wave0,32,(delTab+8)*sizeof(float));
-    posix_memalign((void**)&wave1,32,(delTab+8)*sizeof(float));
-    posix_memalign((void**)&wave,32,(delTab+8)*sizeof(float));
-    posix_memalign((void**)&Fl,32,(delTab+8)*sizeof(float));
-    memset(wave0,0,(delTab+8)*sizeof(float));
-    memset(wave1,0,(delTab+8)*sizeof(float));
-    memset(Fl,0,(delTab+8)*sizeof(float));
+    posix_memalign ((void**)&wave0, 32, size_t (delTab + 8) * sizeof(float));
+    posix_memalign ((void**)&wave1, 32, size_t (delTab + 8) * sizeof(float));
+    posix_memalign ((void**)&wave, 32, size_t (delTab + 8) * sizeof(float));
+    posix_memalign ((void**)&Fl, 32, size_t (delTab + 8) * sizeof(float));
+    memset (wave0, 0, size_t (delTab + 8) * sizeof(float));
+    memset (wave1, 0, size_t(delTab + 8) * sizeof(float));
+    memset (Fl, 0, size_t (delTab + 8) * sizeof(float));
 
     //logf("dwgs top %d %d %d %d %g %g %g %g %g %g %g %g\n",del0,del1,del2,del3,dHammer+1+del2+dTop,del1+del3+dDispersion+lowpassdelay+dBottom, dTop, dBottom, dHammer, inpos*deltot, lowpassdelay, dDispersion);
 
@@ -299,9 +299,9 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
         if(delTab) {
             float n = float (PI) * k / delHalf;
             if(modeTable[k]) delete modeTable[k];
-            posix_memalign ((void**)&modeTable[k], 32, (delTab+8) * sizeof (float));
+            posix_memalign ((void**)&modeTable[k], 32, size_t (delTab + 8) * sizeof (float));
 
-            for(int i=0; i<=delTab; i++)
+            for (int i = 0; i <= delTab; i++)
             {
                 float d = i + delta;
                 float s = sin(d*n);
@@ -328,9 +328,10 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 }
 
 // XXX dwgresonator create 
-void dwgs::damper(float c1, float c3, float gammaL, float gammaL2, int nDamper)
+void dwgs::damper (float c1, float c3, float gammaL, float gammaL2, int nDamper)
 {
-    if(this->c1 == 0) {
+    if (this->c1 == 0)
+    {
         this->c1 = c1;
         this->c3 = c3;
         this->nDamper = 0;
@@ -341,7 +342,9 @@ void dwgs::damper(float c1, float c3, float gammaL, float gammaL2, int nDamper)
         //logf("bottom = %g\n",dBottom);
         fracDelayBottom.create(dBottom,std::min(5,(int)dBottom));
 
-    } else {
+    }
+    else
+    {
         c1M = pow(c1 / this->c1, 4.0 / nDamper);
         c3M = pow(c3 / this->c3, 4.0 / nDamper);
         this->nDamper = nDamper;
@@ -395,35 +398,41 @@ int dwgs::getMinUpsample(int downsample, float Fs, float f, float inpos, float B
         float resample = (float)upsample / (float)downsample;
         float deltot = (Fs*resample) / f;
         del1 = (int)((inpos*deltot) - 1.0);
-        for(int m=0;m<M;m++) {
+
+        for (int m = 0; m < M; m++)
             dispersion[m].create(B,f,M,downsample,upsample);
-        }
-        float omega = TWOPI / deltot;
-        dDispersion = M*dispersion[0].phasedelay(omega);
-        del3 = (int)(0.5*(deltot - inpos * deltot) - dDispersion - 2.0);
-        if(del1 < 2 || del3 < 4) {
+
+        float omega = float (TWOPI) / deltot;
+        dDispersion = M * dispersion[0].phasedelay (omega);
+        del3 = (int)(0.5f * (deltot - inpos * deltot) - dDispersion - 2.0);
+
+        if (del1 < 2 || del3 < 4)
             upsample *= 2;
-        } else {
+        else
             break;
-        }
-    } while(true);
+
+    } while (true);
 
     return upsample;
 }
 
-float dwgs::input_velocity() {
+float dwgs::input_velocity()
+{
     return a0_3 + a1_2;
 }
 
-float dwgs::next_input_velocity() {
+float dwgs::next_input_velocity()
+{
     return d2.probe() + d1.probe();
 }
 
 // returns input to soundboard
 float dwgs::go_string()
 {
-    if(nDamper > 0) {
-        if((nDamper & 3) == 0) {
+    if (nDamper > 0)
+    {
+        if((nDamper & 3) == 0)
+        {
             c1 *= c1M;
             c3 *= c3M;
             loss.create(f,c1,c3,(float)upsample/(float)downsample);
@@ -434,8 +443,6 @@ float dwgs::go_string()
         nDamper--;
     }
     float a;
-
-
 
     a = d0.goDelay(a0_2);
     a = hammerDelay.filter(a);
@@ -458,7 +465,7 @@ float dwgs::go_string()
     return a1_5;
 }
 
-float dwgs::go_soundboard(float load_h, float load_sb)
+float dwgs::go_soundboard (float load_h, float load_sb)
 {
     a0_2 = a0_3 + load_h;
     a1_3 = a1_2 + load_h;
