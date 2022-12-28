@@ -1,10 +1,11 @@
 #ifndef HAMMER_H
 #define HAMMER_H
 
-class Hammer {
+class Hammer
+{
 public:
     Hammer();
-    void set(float Fs, float m, float K, float p, float Z, float alpha, int escapeDelay);
+    void set (float Fs, float m, float K, float p, float Z, float alpha, int escapeDelay);
     ~Hammer();
     
     float getX();

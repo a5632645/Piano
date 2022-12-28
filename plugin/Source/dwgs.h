@@ -10,7 +10,8 @@ enum {
     nMaxLongModes = 128
 };
 
-class dwgs {
+class dwgs
+{
 public:
     dwgs();
     ~dwgs();

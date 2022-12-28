@@ -18,12 +18,15 @@ int USE_DWGS4 = 1;
 
 //XXX delay clear opt
 
-float TUNE[3][3] = {{1.0f, 0.0f, 0.0f },
+float TUNE[3][3] = {
+    {1.0f, 0.0f, 0.0f },
     {0.9997f, 1.0003f, 0.0f},
-    { 1.0001f, 1.0003f, 0.9996f }};
+    { 1.0001f, 1.0003f, 0.9996f }
+};
 
 
-Param params[NumParams] = {
+Param params[NumParams] =
+{
     { pYoungsModulus, "E", "GPa"},
     { pStringDensity, "rho", "kg / m^3" },
     { pHammerMass, "m", "kg" },
@@ -60,21 +63,25 @@ Param params[NumParams] = {
     { pLongModes, "longmodes", "" }
 };
 
-int getParameterIndex(const char *key) {
-    for(int i=0; i<NumParams; i++) {
-        if(!strcmp(key,params[i].name)) return i;
-    }
+int getParameterIndex (const char *key)
+{
+    for (int i = 0; i < NumParams; i++)
+        if (! strcmp (key,params[i].name))
+            return i;
+
     return -1;
 }
 
 double PianoNote::freqTable[NUM_NOTES];
 
-void PianoNote::fillFrequencyTable() {
-    double NOTE_UP_SCALAR = pow(2.0,1.0/12.0);
+void PianoNote::fillFrequencyTable()
+{
+    double NOTE_UP_SCALAR = pow (2.0, 1.0 / 12.0);
     double A = 6.875;	// A
     A *= NOTE_UP_SCALAR;	// A#
     A *= NOTE_UP_SCALAR;	// B
     A *= NOTE_UP_SCALAR;	// C, frequency of midi note 0
+
     for (int i = 0; (i < NUM_NOTES); i++)	// 128 midi notes
     {
         freqTable[i] = A;
@@ -130,12 +137,16 @@ float PianoNote::goDown()
 
 float PianoNote::goDownDelayed()
 {
-    if(tDown == 0) {
+    if(tDown == 0)
+    {
         float in[8] __attribute__((aligned(32)));
-        if(USE_DWGS4 && hammer->isEscaped()) {
+        if(USE_DWGS4 && hammer->isEscaped())
+        {
             *((vec4*)in) = go4();
             *((vec4*)(in+4)) = go4();
-        } else {
+        }
+        else
+        {
             for(int i=0; i<8; i++) {
                 in[i] = go();
             }
@@ -332,13 +343,13 @@ void Piano::init (float Fs_, int blockSize_)
     for (int k = PIANO_MIN_NOTE; k <= PIANO_MAX_NOTE; k++)
     {
         if(noteArray[k]) delete noteArray[k];
-        noteArray[k] = new PianoNote(k, Fs, this);
+        noteArray[k] = new PianoNote(k, int (Fs), this);
     }
 
     if (input)
         delete input;
 
-    input = new float[blockSize];
+    input = new float[size_t (blockSize)];
 
     if (soundboard)
         delete soundboard;

@@ -49,17 +49,20 @@ vec4 dwgs::tran2long4(int delay)
     cur = (d1.cursor + DelaySize - delay + del0 - del1 + 1 ) % DelaySize;
     wave10 = wave0 + delTab + 4;
 
-    if(n <= cur) {
+    if(n <= cur)
+    {
         float *x1 = x + cur;
-        memcpy(wave10-n, x1-n, n*sizeof(float));
+        memcpy (wave10-n, x1-n, size_t (n) * sizeof(float));
         /*
          for(int i=-1; i>=-n; i--) {
          wave10[i] = x1[i];
          }
          */
-    } else {
+    }
+    else
+    {
         float *x1 = x + cur;
-        memcpy(wave10-cur, x1-cur, cur*sizeof(float));
+        memcpy(wave10-cur, x1-cur, size_t (cur) * sizeof(float));
         /*
          for(int i=-1; i>=-cur; i--) {
          wave10[i] = x1[i];
@@ -68,7 +71,7 @@ vec4 dwgs::tran2long4(int delay)
 
         int cur2 = cur + DelaySize;
         x1 = x + cur2;
-        memcpy(wave10-n, x1-n, (n-cur)*sizeof(float));
+        memcpy(wave10-n, x1-n, size_t (n-cur) * sizeof(float));
         /*
          for(int i=-cur-1; i>=-n; i--) {
          wave10[i] = x1[i];
@@ -85,15 +88,15 @@ vec4 dwgs::tran2long4(int delay)
 
         float* wave10 = wave0 + j;
 #ifdef STRING_DEBUG
-        for(int i=0; i<=delTab; i++) {
+        for(int i=0; i<=delTab; i++)
             printf("%g ",wave10[i]);
-        }
         printf("\n");
 #endif
 
 
         n = del0 + del2 + del4 + 5;
-        if(n <= cur) {
+        if (n <= cur)
+        {
             float *x1 = x + cur;
             ms4 (wave10, x1 - n + 1, wave, n);
 
@@ -345,8 +348,8 @@ void dwgs::damper (float c1, float c3, float gammaL, float gammaL2, int nDamper)
     }
     else
     {
-        c1M = pow(c1 / this->c1, 4.0 / nDamper);
-        c3M = pow(c3 / this->c3, 4.0 / nDamper);
+        c1M = pow (c1 / this->c1, 4.0 / nDamper);
+        c3M = pow (c3 / this->c3, 4.0 / nDamper);
         this->nDamper = nDamper;
     }
 
@@ -709,11 +712,11 @@ float dwgs::tran2long(int delay)
         wave[i] = square(wave[i]);
     }
 
-    Fl[3] = 2.0 * (wave[1] - wave[0]);
+    Fl[3] = 2.0f * (wave[1] - wave[0]);
     for(int i=1; i<delTab; i++) {
         Fl[3+i] = (wave[i+1] - wave[i-1]);
     }
-    Fl[delTab+3] = 2.0 * (wave[delTab] - wave[delTab-1]);
+    Fl[delTab+3] = 2.0f * (wave[delTab] - wave[delTab-1]);
 
 #ifdef LONG_DEBUG
     for(int i=0; i<=delTab; i++) {
