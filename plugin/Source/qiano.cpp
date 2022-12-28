@@ -104,15 +104,19 @@ float PianoNote::goUpDelayed()
 {
     if (tUp == 0)
     {
-        float in[8] __attribute__((aligned(32)));
-        for(int i=0; i<8; i++) {
-            if(i&1) {
-                if(downsample == 1) {
+        alignas(32) float in[8];
+
+        for (int i=0; i<8; i++) 
+        {
+            if (i & 1) 
+            {
+                if (downsample == 1) 
                     in[i] = goDown();
-                } else {
+                else 
                     in[i] = 0;
-                }
-            } else {
+            } 
+            else 
+            {
                 in[i] = goDown();
             }
         }
@@ -137,9 +141,9 @@ float PianoNote::goDown()
 
 float PianoNote::goDownDelayed()
 {
-    if(tDown == 0)
+    if (tDown == 0)
     {
-        float in[8] __attribute__((aligned(32)));
+        alignas(32) float in[8];
         if(USE_DWGS4 && hammer->isEscaped())
         {
             *((vec4*)in) = go4();

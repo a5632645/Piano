@@ -129,9 +129,9 @@ protected:
     float longForces[MaxDecimation + 1];
     float longForcesK[MaxDecimation + 1];
 
-    float tranForces[TranBufferSize]  __attribute__((aligned(32)));
-    float tranForcesH[TranBufferSize]  __attribute__((aligned(32)));
-    float longTranForces[TranBufferSize]  __attribute__((aligned(32)));
+    alignas(32) float tranForces[TranBufferSize];
+    alignas(32) float tranForcesH[TranBufferSize];
+    alignas(32) float longTranForces[TranBufferSize];
 
     float T;
     float mu;
@@ -142,8 +142,8 @@ protected:
     dwgs* stringHT[3];
     Hammer* hammer;
 
-    float outUp[8] __attribute__((aligned(32)));
-    float outDown[8] __attribute__((aligned(32)));
+    alignas(32) float outUp[8];
+    alignas(32) float outDown[8];
     int tUp;
     int tDown;
     int upSampleDelayNeeded;

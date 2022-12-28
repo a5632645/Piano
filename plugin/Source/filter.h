@@ -106,8 +106,8 @@ public:
     int d1;
     int cursor;
 
-    float *x;
-    float x_[size+16] __attribute__((aligned(32)));
+    float* x;
+    alignas(32) float x_[size+16];
 
     enum {
         mask = size-1 };
@@ -151,8 +151,8 @@ public:
 
     vec4 probe4()
     {
-        float out[4] __attribute__((aligned(32)));
-        for(int i=2; i<4; i++)
+        alignas(32) float out[4];
+        for (int i = 2; i < 4; i++)
         {
             int d = d1 + i - 2;
             out[i] = x[(d + size) & mask];
@@ -229,8 +229,8 @@ public:
     int getDelay();
     void create(int resample);
     vec8 filter8(vec8 in);
-    float b[ResampleFilterSize]  __attribute__((aligned(32)));
-    float x[ResampleFilterSize*4+16]  __attribute__((aligned(32)));
+    alignas(32) float b[ResampleFilterSize];
+    alignas(32) float x[ResampleFilterSize*4+16];
     float *xc;
     float *xend;
     float *bend;

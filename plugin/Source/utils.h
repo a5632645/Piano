@@ -7,6 +7,8 @@
 #define vImage_Utilities_h
 #define vImage_CVUtilities_h
 
+#include <cmath>
+
 #include "../../modules/simde/x86/avx.h"
 #include "../../modules/simde/x86/sse3.h"
 #include "../../modules/simde/x86/svml.h"

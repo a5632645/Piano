@@ -92,7 +92,7 @@ float Reverb::reverb (float in)
  */
 
 template<>
-float ConvolveReverb<revSize>::res[revSize] __attribute__ ((aligned(32))) = {
+alignas(32) float ConvolveReverb<revSize>::res[revSize] = {
     0.000427246f,
     0.000244141f,
     0.000579834f,

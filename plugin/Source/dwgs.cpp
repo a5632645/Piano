@@ -36,7 +36,7 @@ vec4 dwgs::tran2long4 (int delay)
         return out;
     }
 
-    float out[4] __attribute__((aligned(32)));
+    alignas(32) float out[4];
     float *x;
     int cur;
     int n;
@@ -524,7 +524,7 @@ void dwgs::init_string1()
 
 void dwgs::init_string4()
 {
-    float v[4] __attribute__((aligned(32)));
+    alignas(32) float v[4];
     v[0] = a0_2;
     a0_3 = d2.goDelay(a0_4);
     a0_2 = a0_3;

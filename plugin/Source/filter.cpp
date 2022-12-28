@@ -336,8 +336,8 @@ DWGResonator::DWGResonator()
 
 vec4 DWGResonator::go4(vec4 vin)
 {
-    float out[4] __attribute__((aligned(32)));
-    float in[4] __attribute__((aligned(32)));
+    alignas(32) float out[4];
+    alignas(32) float in[4];
     simde_mm_store_ps(in, vin);
 
     for (int i = 0; i < 4; i++)

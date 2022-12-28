@@ -24,7 +24,7 @@ class ConvolveReverb {
     int headBlockSize;
     
 public:
-    static float res[resSize] __attribute__ ((aligned(32)));
+    static alignas(32) float res[resSize];
     int k;
     Delay<delaySize> d;
     //TwoStageFFTConvolver fftConvolver;
