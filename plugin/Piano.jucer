@@ -6,7 +6,8 @@
               pluginManufacturerCode="Soca" pluginCode="SLpn" pluginAUMainType="'aumu'"
               cppLanguageStandard="17" pluginChannelConfigs="{0,2}" version="1.0.0"
               jucerFormatVersion="1" useAppConfig="0" addUsingNamespaceToJuceHeader="0"
-              defines="JUCE_DISPLAY_SPLASH_SCREEN=0&#10;JUCE_MODAL_LOOPS_PERMITTED=1">
+              defines="JUCE_DISPLAY_SPLASH_SCREEN=0&#10;JUCE_MODAL_LOOPS_PERMITTED=1"
+              lv2Uri="https://socalabs.com/piano/">
   <MAINGROUP id="Hs1HPA" name="Piano">
     <GROUP id="{0CE63D98-F319-7656-21CD-D7A21B4A4B6C}" name="Source">
       <FILE id="MCFCuy" name="AudioFFT.cpp" compile="1" resource="0" file="Source/AudioFFT.cpp"/>
