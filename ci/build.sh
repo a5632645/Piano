@@ -80,8 +80,8 @@ fi
 if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   cd "$ROOT"
   
-  cmake --preset ninja-gcc
-  cmake --build --preset ninja-gcc --config Release
+  cmake --preset ninja-clang
+  cmake --build --preset ninja-clang --config Release
 
   cp -R "$ROOT/Builds/ninja-gcc/${PLUGIN}_artefacts/Release/LV2/$PLUGIN.lv2" "$ROOT/ci/bin"
   cp -R "$ROOT/Builds/ninja-gcc/${PLUGIN}_artefacts/Release/VST/lib$PLUGIN.so" "$ROOT/ci/bin/$PLUGIN.so"
