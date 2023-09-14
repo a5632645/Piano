@@ -23,7 +23,6 @@ public:
 PianoAudioProcessorEditor::PianoAudioProcessorEditor (PianoAudioProcessor& p_)
     : ProcessorEditor (p_), proc (p_)
 {
-    additionalProgramming = "Clayton Otey";
     setName ("main");
     
     keyboard.setName ("keys");

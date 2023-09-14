@@ -115,6 +115,7 @@ static float userValue (int32_t index, float value)
 
 //==============================================================================
 PianoAudioProcessor::PianoAudioProcessor()
+    : gin::Processor (false, gin::ProcessorOptions().withAdditionalCredits({"Clayton Otey"}))
 {
     auto textFunction = [this] (const gin::Parameter& p, float v)
     {
@@ -156,6 +157,8 @@ PianoAudioProcessor::PianoAudioProcessor()
     params.add (addExtParam ("Dwgs4", "Dwgs4", "", "" , { 0.0f, 1.0f }, 1.0f, {0.0f}, textFunction));
     params.add (addExtParam ("Downsample", "Downsample", "", "" , { 0.0f, 1.0f }, 0.0f, {0.0f}, textFunction));
     params.add (addExtParam ("LongModes", "Long Modes", "", "", { 0.0f, 1.0f }, 0.0f, {0.0f}, textFunction));
+
+    init();
 }
 
 PianoAudioProcessor::~PianoAudioProcessor()
