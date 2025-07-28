@@ -1,7 +1,6 @@
 #pragma once
-#include <assert.h>
 #include <cassert>
-#include <corecrt_malloc.h>
+#include <cstdlib>
 #include <cstddef>
 #include <memory>
 
