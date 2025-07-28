@@ -99,7 +99,10 @@ static float Db (float B, float f, int M)
 
 Filter::~Filter()
 {
-
+    _aligned_free(b);
+    _aligned_free(a);
+    _aligned_free(x);
+    _aligned_free(y);
 }
 
 Filter::Filter(int nmax_)
