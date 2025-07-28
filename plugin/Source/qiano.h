@@ -105,8 +105,10 @@ public:
     Piano* piano = nullptr;
 
     bool isDone();
-    float maxEnergy;
-    float energy;
+    // float maxEnergy;
+    // float energy;
+    float lastOutput_ = 0.0f;
+    float currentOutput_ = 0.0f;
     Delay<65536> outputdelay;
     static void fillFrequencyTable();
     static double freqTable[NUM_NOTES];

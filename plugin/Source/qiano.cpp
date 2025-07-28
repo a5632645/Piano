@@ -237,9 +237,9 @@ float PianoNote::go()
 
     //cout << output << "\n";
     float delayed = outputdelay.goDelay(output);
-    energy = energy + output*output - delayed*delayed;
-    if(energy>maxEnergy)
-        maxEnergy = energy;
+    // energy = energy + output*output - delayed*delayed;
+    // if(energy>maxEnergy)
+    //     maxEnergy = energy;
 
     tTranRead = (tTranRead + 1)%TranBufferSize;
 
@@ -303,9 +303,18 @@ vec4 PianoNote::go4()
     vec4 output = simde_mm_add_ps (simde_mm_mul_ps (s1, simde_mm_broadcast_ss(&tranBridgeForce)), simde_mm_mul_ps (s2, simde_mm_broadcast_ss (&longMix)));
 
     vec4 delayed = outputdelay.goDelay4(output);
-    energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
-    if(energy>maxEnergy)
-        maxEnergy = energy;
+    /* the output and delayed finnally stuck at -12.xxx values in default parameters
+     * this cause the energy calculation can not stop a note
+     * this cause bool PianoNote::isDone() always return false
+     * finnally, too many PianoNote instances cause cpu heavry
+    */
+    // energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
+    // if(energy>maxEnergy)
+    //     maxEnergy = energy;
+    lastOutput_ = currentOutput_;
+    vec4 sum = simde_mm_hadd_ps(output, output);
+    vec4 sum2 = simde_mm_hadd_ps(sum, sum);
+    currentOutput_ = simde_mm_cvtss_f32(sum2);
 
 
     tTranRead = (tTranRead + 4)%TranBufferSize;
@@ -421,7 +430,12 @@ PianoNote::PianoNote (int note_, int Fs_, Piano* piano_)
 bool PianoNote::isDone()
 {
     //return false;
-    return (energy < 1e-8 * maxEnergy);
+    // float e = maxEnergy * 1e-8f;
+    // return energy < e;
+    // return (energy < 1e-8 * maxEnergy);
+
+    /* too small variation, see as slience */
+    return std::abs(lastOutput_ - currentOutput_) < 1e-1f;
 }
 
 void PianoNote::triggerOn (float velocity, float* tune)
@@ -600,8 +614,10 @@ void PianoNote::triggerOn (float velocity, float* tune)
 
     hammer->set(resample*Fs,m,K,p,Z,alpha,maxDel2+128);
     hammer->strike(velocity);
-    maxEnergy = 0.0;
-    energy = 0.0;
+    // maxEnergy = 0.0;
+    // energy = 0.0;
+    lastOutput_ = 0.0f;
+    currentOutput_ = 0.0f;
 
 
     tranBridgeForce = Z;
