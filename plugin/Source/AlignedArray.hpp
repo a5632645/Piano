@@ -1,4 +1,5 @@
 #pragma once
+#include <assert.h>
 #include <cassert>
 #include <corecrt_malloc.h>
 #include <cstddef>
@@ -25,10 +26,13 @@ public:
     ~AlignedArray() {
         Free();
     }
-
     void Free() {
         if (ptr_) {
+#ifdef _WINDOWS
             _aligned_free(ptr_);
+#else
+            free(ptr_);
+#endif
             ptr_ = nullptr;
             size_ = 0;
         }
@@ -36,7 +40,13 @@ public:
 
     void Reset(size_t size) {
         Free();
+#ifdef _WINDOWS
         ptr_ = (T*)_aligned_malloc(size * sizeof(T), aligenment);
+        if (!ptr_) assert(false);
+#else
+        auto result = posix_memalign((void**)&ptr_, aligenment, size * sizeof(T));
+        if (result != 0) assert(false);
+#endif
         std::fill_n(ptr_, size, T{});
         size_ = size;
     }
