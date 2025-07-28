@@ -1,6 +1,7 @@
 #pragma once
 #include <cassert>
 #include <corecrt_malloc.h>
+#include <cstddef>
 #include <memory>
 
 template<class T>
@@ -40,12 +41,21 @@ public:
         size_ = size;
     }
 
-    float& operator[](size_t i) {
+    T& operator[](size_t i) {
         assert(i < size_);
         return ptr_[i];
     }
 
-    float* Get() const {
+    T operator[](size_t i) const {
+        assert(i < size_);
+        return ptr_[i];
+    }
+
+    T* Get() {
+        return ptr_;
+    }
+
+    const T* Get() const {
         return ptr_;
     }
 
