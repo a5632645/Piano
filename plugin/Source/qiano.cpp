@@ -451,7 +451,8 @@ bool PianoNote::isDone()
     // return energy < e;
     // return (energy < 1e-8 * maxEnergy);
 
-    /* too small variation, see as slience */
+    /* too small variation, seen as slience */
+    /* this value will cut the note at almost -60dB */
     bool done = std::abs(lastOutput_ - currentOutput_) < 1e-1f;
     done |= std::isnan(lastOutput_);
     return done;
