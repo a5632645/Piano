@@ -2,12 +2,59 @@
 #define DWGS_H
 
 #include "filter.h"
+#include <crtdbg.h>
+#include <cstddef>
 
 class dwgs;
 
 enum {
     DelaySize = 4096,
     nMaxLongModes = 128
+};
+
+class MySpan {
+public:
+    MySpan() = default;
+    MySpan(float* ptr, size_t size) : ptr_(ptr), size_(size) {}
+    float& operator[](size_t i) { return ptr_[i]; }
+    float* Get() const { return ptr_; }
+private:
+    float* ptr_{ nullptr };
+    size_t size_{ 0 };
+};
+
+class AligendArray {
+public:
+    ~AligendArray() {
+        if (ptr_) {
+            _aligned_free(ptr_);
+        }
+    }
+
+    void Reset(size_t size) {
+        ptr_ = (float*)_aligned_malloc(size * sizeof(float), 32);
+        std::fill_n(ptr_, size, 0.0f);
+        size_ = size;
+    }
+
+    float& operator[](size_t i) {
+        return ptr_[i];
+    }
+
+    float* Get() const {
+        return ptr_;
+    }
+
+    MySpan Span(size_t offset) const {
+        return {ptr_ + offset, size_ - offset};
+    }
+
+    MySpan operator+(size_t offset) const {
+        return Span(offset);
+    }
+private:
+    float* ptr_{ nullptr };
+    size_t size_{ 0 };
 };
 
 class dwgs
@@ -38,10 +85,14 @@ public:
     
     int downsample;
     int delTab;
-    float *wave;
-    float *wave0;
-    float *wave1;
-    float *Fl;
+    // float *wave;
+    // float *wave0;
+    // float *wave1;
+    // float *Fl;
+    AligendArray wave;
+    AligendArray wave0;
+    AligendArray wave1;
+    AligendArray Fl;
     
     float F[nMaxLongModes];
     vec4 F4[nMaxLongModes];
@@ -67,8 +118,9 @@ public:
     Thiran hammerDelay;
     ThiranDispersion dispersion[4];
     
-    float *modeTable[nMaxLongModes];
-    float *modeTable4[nMaxLongModes];
+    // float *modeTable[nMaxLongModes];
+    // float *modeTable4[nMaxLongModes];
+    AligendArray modeTable[nMaxLongModes];
     float fLong[nMaxLongModes];
     DWGResonator longModeResonator[nMaxLongModes];
     
