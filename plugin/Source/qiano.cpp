@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstddef>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -338,41 +339,42 @@ vec4 PianoNote::go4()
 
 void Piano::addVoice(PianoNote *v)
 { 
-    if(voiceList)
-	{
-        v->next = voiceList;
-        v->prev = voiceList->prev;
-        voiceList->prev->next = v;
-        voiceList->prev = v;
-    }
-	else
-	{
-        voiceList = v;
-        v->prev = v;
-        v->next = v;
-    }
+    // if(voiceList)
+	// {
+    //     v->next = voiceList;
+    //     v->prev = voiceList->prev;
+    //     voiceList->prev->next = v;
+    //     voiceList->prev = v;
+    // }
+	// else
+	// {
+    //     voiceList = v;
+    //     v->prev = v;
+    //     v->next = v;
+    // }
+    voiceList[numActiveVoices++] = v;
 }
 
 void Piano::removeVoice(PianoNote *v)
 {	
-    if (v == voiceList)
-    {
-        if(v == v->next)
-            voiceList = nullptr;
-        else
-            voiceList = v->next;
-    }
-    PianoNote *p = v->prev;
-    PianoNote *n = v->next;
-    p->next = n;
-    n->prev = p;
+    // if (v == voiceList)
+    // {
+    //     if(v == v->next)
+    //         voiceList = nullptr;
+    //     else
+    //         voiceList = v->next;
+    // }
+    // PianoNote *p = v->prev;
+    // PianoNote *n = v->next;
+    // p->next = n;
+    // n->prev = p;
 }
 
 void Piano::init (float Fs_, int blockSize_)
 {
     Fs = Fs_;
     blockSize = blockSize_;
-    voiceList = nullptr;
+    // voiceList = nullptr;
     PianoNote::fillFrequencyTable();
 
     for (int k = PIANO_MIN_NOTE; k <= PIANO_MAX_NOTE; k++)
@@ -717,14 +719,19 @@ void Piano::process (float* out, int samples)
 {
     for (int i = 0; i < samples; i++)
     {
-        PianoNote* v = voiceList;
-        float output = 0;
-        do
-        {
-            if (v)
-                output += v->goUp();
+        // PianoNote* v = voiceList;
+        // float output = 0;
+        // do
+        // {
+        //     if (v)
+        //         output += v->goUp();
 
-        } while (v && (v=v->next) && (v != voiceList));
+        // } while (v && (v=v->next) && (v != voiceList));
+        float output = 0.0f;
+        for (size_t i = 0; i < numActiveVoices; ++i)
+        {
+            output += voiceList[i]->goUp();
+        }
 #if FDN_REVERB
         out[i] = vals[pVolume] * soundboard->reverb(output);
 #else
@@ -749,22 +756,35 @@ void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
 { 
     int delta = 0;
 
-    PianoNote* v = voiceList;
-    PianoNote* remove[NUM_NOTES];
+    // PianoNote* v = voiceList;
+    // PianoNote* remove[NUM_NOTES];
 
-    int k = 0;
+    // int k = 0;
 
-    do
+    // do
+    // {
+    //     if (v && v->isDone())
+    //     {
+    //         v->deActivate();
+    //         remove[k++] = v;
+    //     }
+    // } while (v && (v=v->next) && (v!=voiceList));
+
+    // for (int j = 0; j < k; j++)
+    //     removeVoice (remove[j]);
+    for (size_t i = 0; i < numActiveVoices;)
     {
-        if (v && v->isDone())
+        PianoNote* v = voiceList[i];
+        if (v->isDone())
         {
             v->deActivate();
-            remove[k++] = v;
+            std::swap(voiceList[i], voiceList[--numActiveVoices]);
         }
-    } while (v && (v=v->next) && (v!=voiceList));
-
-    for (int j = 0; j < k; j++)
-        removeVoice (remove[j]);
+        else
+        {
+            ++i;
+        }
+    }
 
     for (auto meta : midi)
     {

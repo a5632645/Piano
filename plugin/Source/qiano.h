@@ -3,6 +3,7 @@
 #define PIANO_H
 
 #include <JuceHeader.h>
+#include <cstddef>
 
 #define PIANO_MIN_NOTE 21
 #define PIANO_MAX_NOTE 108
@@ -99,8 +100,8 @@ public:
     bool isActive();
     void deActivate();
 
-    PianoNote* next = nullptr;
-    PianoNote* prev = nullptr;
+    // PianoNote* next = nullptr;
+    // PianoNote* prev = nullptr;
     int note;
     Piano* piano = nullptr;
 
@@ -190,8 +191,10 @@ public:
 protected:     
     friend class PianoNote;
     Value vals[NumParams];
-    PianoNote* voiceList;
+    // PianoNote* voiceList;
     // PianoNote* noteArray[NUM_NOTES];
+    std::array<PianoNote*, NUM_NOTES> voiceList{};
+    size_t numActiveVoices = 0;
     std::array<std::unique_ptr<PianoNote>, NUM_NOTES> noteArray;
     int blockSize;
     float Fs;
