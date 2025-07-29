@@ -322,13 +322,13 @@ vec4 PianoNote::go4()
      * this cause bool PianoNote::isDone() always return false
      * finnally, too many PianoNote instances cause cpu heavry
     */
-    // energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
-    // if(energy>maxEnergy)
-    //     maxEnergy = energy;
-    lastOutput_ = currentOutput_;
-    vec4 sum = simde_mm_hadd_ps(output, output);
-    vec4 sum2 = simde_mm_hadd_ps(sum, sum);
-    currentOutput_ = simde_mm_cvtss_f32(sum2);
+    energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
+    if(energy>maxEnergy)
+        maxEnergy = energy;
+    // lastOutput_ = currentOutput_;
+    // vec4 sum = simde_mm_hadd_ps(output, output);
+    // vec4 sum2 = simde_mm_hadd_ps(sum, sum);
+    // currentOutput_ = simde_mm_cvtss_f32(sum2);
 
 
     tTranRead = (tTranRead + 4)%TranBufferSize;
@@ -447,15 +447,15 @@ PianoNote::PianoNote (int note_, int Fs_, Piano* piano_)
 bool PianoNote::isDone()
 {
     //return false;
-    // float e = maxEnergy * 1e-8f;
-    // return energy < e;
-    // return (energy < 1e-8 * maxEnergy);
+    float e = maxEnergy * 1e-8f;
+    return energy < e;
+    return (energy < 1e-8 * maxEnergy);
 
     /* too small variation, seen as slience */
     /* this value will cut the note at almost -60dB */
-    bool done = std::abs(lastOutput_ - currentOutput_) < 1e-1f;
-    done |= std::isnan(lastOutput_);
-    return done;
+    // bool done = std::abs(lastOutput_ - currentOutput_) < 1e-1f;
+    // done |= std::isnan(lastOutput_);
+    // return done;
 }
 
 void PianoNote::triggerOn (float velocity, float* tune)
@@ -634,10 +634,10 @@ void PianoNote::triggerOn (float velocity, float* tune)
 
     hammer.set(resample*Fs,m,K,p,Z,alpha,maxDel2+128);
     hammer.strike(velocity);
-    // maxEnergy = 0.0;
-    // energy = 0.0;
-    lastOutput_ = 0.0f;
-    currentOutput_ = 0.0f;
+    maxEnergy = 0.0;
+    energy = 0.0;
+    // lastOutput_ = 0.0f;
+    // currentOutput_ = 0.0f;
 
 
     tranBridgeForce = Z;
