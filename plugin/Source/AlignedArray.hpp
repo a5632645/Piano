@@ -4,21 +4,6 @@
 #include <cstddef>
 #include <memory>
 
-template<class T>
-class MySpan {
-public:
-    MySpan() = default;
-    MySpan(T* ptr, size_t size) : ptr_(ptr), size_(size) {}
-    T* Get() const { return ptr_; }
-    T& operator[](size_t i) {
-        assert(i < size_);
-        return ptr_[i];
-    }
-private:
-    T* ptr_{ nullptr };
-    size_t size_{ 0 };
-};
-
 template<class T, size_t aligenment>
 class AlignedArray {
 public:
@@ -68,14 +53,6 @@ public:
         return ptr_;
     }
 
-    MySpan<T> Span(size_t offset) const {
-        assert(offset < size_);
-        return {ptr_ + offset, size_ - offset};
-    }
-
-    MySpan<T> operator+(size_t offset) const {
-        return Span(offset);
-    }
 private:
     T* ptr_{ nullptr };
     size_t size_{ 0 };
