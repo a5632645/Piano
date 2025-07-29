@@ -2,7 +2,6 @@
 #define DWGS_H
 
 #include "filter.h"
-#include <crtdbg.h>
 #include "AlignedArray.hpp"
 
 class dwgs;

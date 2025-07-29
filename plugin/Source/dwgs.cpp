@@ -1,5 +1,4 @@
 #include "dwgs.h"
-#include <corecrt_malloc.h>
 #include <math.h>
 #include <stdio.h>
 #include "utils.h"
