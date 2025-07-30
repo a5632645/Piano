@@ -107,24 +107,25 @@ float PianoNote::goUpDelayed()
 {
     if (tUp == 0)
     {
-        alignas(32) float in[8];
-
-        for (int i=0; i<8; i++) 
+        if (downsample == 2)
         {
-            if (i & 1) 
-            {
-                if (downsample == 1) 
-                    in[i] = goDown();
-                else 
-                    in[i] = 0;
-            } 
-            else 
+            alignas(32) float in[8];
+            for (int i = 0; i < 8; i += 2) 
             {
                 in[i] = goDown();
+                in[i + 1] = 0;
+            }
+            vec8 out8 = upSampleFilter.filter8 (simde_mm256_load_ps(in));
+            simde_mm256_store_ps (outUp, out8);
+        }
+        else
+        {
+            // no downsample here
+            for (int i = 0; i < 8; i++) 
+            {
+                outUp[i] = goDown();
             }
         }
-        vec8 out8 = upSampleFilter.filter8 (simde_mm256_load_ps(in));
-        simde_mm256_store_ps (outUp, out8);
     }
 
     float out = outUp[tUp];
@@ -147,15 +148,19 @@ float PianoNote::goDownDelayed()
     if (tDown == 0)
     {
         alignas(32) float in[8];
-        // if(piano->USE_DWGS4 && hammer->isEscaped())
         if(piano->USE_DWGS4 && hammer.isEscaped())
         {
-            *((vec4*)in) = go4();
-            *((vec4*)(in+4)) = go4();
+            auto vec = go4();
+            simde_mm_store_ps(in, vec);
+            vec = go4();
+            simde_mm_store_ps(in + 4, vec);
+            // *((vec4*)in) = go4();
+            // *((vec4*)(in+4)) = go4();
         }
         else
         {
-            for(int i=0; i<8; i++) {
+            for(int i=0; i<8; i++)
+            {
                 in[i] = go();
             }
         }
@@ -186,29 +191,26 @@ float PianoNote::go()
 
     float longForce = 0;
 
-    while(tLong <= 0) {
+    while(tLong <= 0)
+    {
         float vstringT0 = 0.0;
         float vstringT1 = 0.0;
 
-        for(int k=0;k<nstrings;k++) {
-            // vstringT0 += stringT[k]->input_velocity();
-            // vstringT1 += stringT[k]->next_input_velocity();
+        for(int k = 0; k < nstrings; k++)
+        {
             vstringT0 += stringT[k].input_velocity();
             vstringT1 += stringT[k].next_input_velocity();
         }
         float vin0 = vstringT0 * nstringsi;
         float vin1 = vstringT1 * nstringsi;
-        // float hload = hammer->load(vin0,vin1)*Z2i;
-        float hload = hammer.load(vin0,vin1)*Z2i;
+        float hload = hammer.load(vin0, vin1) * Z2i;
 
         float sbloadT = 0.0;
         float sbloadHT = 0.0;
 
         for(int k=0;k<nstrings;k++) {
-            // sbloadT += stringT[k]->go_string();
             sbloadT += stringT[k].go_string();
 #ifdef HSTRING
-            // sbloadHT += stringHT[k]->go_string();
             sbloadHT += stringHT[k].go_string();
 #endif
         }
@@ -221,13 +223,10 @@ float PianoNote::go()
         float tranForceH = 0.0f;
         float longTranForce = 0.0f;
         for(int k=0;k<nstrings;k++) {
-            // tranForce += stringT[k]->go_soundboard(hload,out[0]);
             tranForce += stringT[k].go_soundboard(hload,out[0]);
 #ifdef HSTRING
-            // tranForceH += stringHT[k]->go_soundboard(0,out[1]);
             tranForceH += stringHT[k].go_soundboard(0,out[1]);
 #endif
-            // longTranForce += stringT[k]->longTran();
             longTranForce += stringT[k].longTran();
         }
 
@@ -237,8 +236,8 @@ float PianoNote::go()
         tranForcesH[tTran] = tranForceH;
         tTran = (tTran + 1)%TranBufferSize;
 
-        if(tLong >= 0) {
-            // longForce = stringT[0]->tran2long(longDelay);
+        if(tLong >= 0)
+        {
             longForce = stringT[0].tran2long(longDelay);
         }
         tLong++;
@@ -255,7 +254,7 @@ float PianoNote::go()
     // if(energy>maxEnergy)
     //     maxEnergy = energy;
 
-    tTranRead = (tTranRead + 1)%TranBufferSize;
+    tTranRead = (tTranRead + 1) % TranBufferSize;
 
     return output;
 }
