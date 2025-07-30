@@ -4,6 +4,7 @@
 
 #include <JuceHeader.h>
 #include <cstddef>
+#include <span>
 
 #define PIANO_MIN_NOTE 21
 #define PIANO_MAX_NOTE 108
@@ -100,16 +101,12 @@ public:
     bool isActive();
     void deActivate();
 
-    // PianoNote* next = nullptr;
-    // PianoNote* prev = nullptr;
     int note;
     Piano* piano = nullptr;
 
     bool isDone();
     float maxEnergy;
     float energy;
-    // float lastOutput_ = 0.0f;
-    // float currentOutput_ = 0.0f;
     Delay<65536> outputdelay;
     static void fillFrequencyTable();
     static double freqTable[NUM_NOTES];
@@ -143,9 +140,6 @@ protected:
     float f;
     int nstrings;
 
-    // dwgs* stringT[3];
-    // dwgs* stringHT[3];
-    // Hammer* hammer;
     dwgs stringT[3];
     dwgs stringHT[3];
     Hammer hammer;
@@ -176,9 +170,8 @@ public:
 
     void addVoice (PianoNote *v);
     void removeVoice (PianoNote *v);
-    void process (float *out, int samples);
-    void process (float **out, int frameSamples, int offset);
-    void process (float **out, int frameSamples, juce::MidiBuffer&);
+    void process (std::span<float> block);
+    void process (std::span<float> block, juce::MidiBuffer&);
     void init (float Fs, int blockSize);
     void triggerOn (int note, float velocity, float *tune);
 
@@ -191,19 +184,15 @@ public:
 protected:     
     friend class PianoNote;
     Value vals[NumParams];
-    // PianoNote* voiceList;
-    // PianoNote* noteArray[NUM_NOTES];
     std::array<PianoNote*, NUM_NOTES> voiceList{};
     size_t numActiveVoices = 0;
     std::array<std::unique_ptr<PianoNote>, NUM_NOTES> noteArray;
     int blockSize;
     float Fs;
-    // float* input = nullptr;
     std::vector<float> input;
 
 #if FDN_REVERB
     std::unique_ptr<Reverb> soundboard;
-    // Reverb *soundboard;
 #else
     std::unique_ptr<ConvolveReverb<revSize>> soundboard;
 #endif

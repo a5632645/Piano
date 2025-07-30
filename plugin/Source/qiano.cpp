@@ -1,3 +1,4 @@
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <math.h>
@@ -715,25 +716,17 @@ Piano::~Piano()
     // delete soundboard;
 }
 
-void Piano::process (float* out, int samples)
+void Piano::process (std::span<float> block)
 {
-    for (int i = 0; i < samples; i++)
+    for (size_t i = 0; i < block.size(); i++)
     {
-        // PianoNote* v = voiceList;
-        // float output = 0;
-        // do
-        // {
-        //     if (v)
-        //         output += v->goUp();
-
-        // } while (v && (v=v->next) && (v != voiceList));
         float output = 0.0f;
         for (size_t i = 0; i < numActiveVoices; ++i)
         {
             output += voiceList[i]->goUp();
         }
 #if FDN_REVERB
-        out[i] = vals[pVolume] * soundboard->reverb(output);
+        block[i] = vals[pVolume] * soundboard->reverb(output);
 #else
         out[i] =  vals[pVolume] * output;
         input[i] =  vals[pVolume] * output;
@@ -746,32 +739,10 @@ void Piano::process (float* out, int samples)
 #endif
 }
 
-void Piano::process (float** out, int samples, int offset)
-{
-    process (out[0] + offset, samples);
-    memcpy (out[1] + offset, out[0] + offset, size_t (samples) * sizeof (float));
-}
-
-void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
+void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
 { 
     int delta = 0;
 
-    // PianoNote* v = voiceList;
-    // PianoNote* remove[NUM_NOTES];
-
-    // int k = 0;
-
-    // do
-    // {
-    //     if (v && v->isDone())
-    //     {
-    //         v->deActivate();
-    //         remove[k++] = v;
-    //     }
-    // } while (v && (v=v->next) && (v!=voiceList));
-
-    // for (int j = 0; j < k; j++)
-    //     removeVoice (remove[j]);
     for (size_t i = 0; i < numActiveVoices;)
     {
         PianoNote* v = voiceList[i];
@@ -793,9 +764,9 @@ void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
         if (! m.isNoteOnOrOff())
             continue;
 
-        int nextDelta = int (m.getTimeStamp());
-        nextDelta = std::min (nextDelta, sampleFrames);
-        process (outS, nextDelta - delta, delta);
+        size_t nextDelta = static_cast<size_t>(m.getTimeStamp());
+        nextDelta = std::min (nextDelta, block.size());
+        process (block.subspan(delta));
 
         if (m.getNoteNumber() >= PIANO_MIN_NOTE && m.getNoteNumber() <= PIANO_MAX_NOTE)
         {
@@ -810,15 +781,14 @@ void Piano::process (float** outS, int sampleFrames, juce::MidiBuffer& midi)
             }
             else
             {
-                if (v)
-                    v->triggerOff();
+                v->triggerOff();
             }
         }
 
         delta = nextDelta;
     }
 
-    process (outS, sampleFrames - delta, delta);
+    process(block.subspan(delta));
 }
 
 void Piano::triggerOn (int note, float velocity, float* tune)

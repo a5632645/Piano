@@ -1,5 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <cstddef>
+#include <span>
 
 static float userValue (int32_t index, float value)
 {
@@ -204,8 +206,11 @@ void PianoAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
     for (auto p : params)
         piano.setParameter (idx++, p->getValue());
 
-    auto ptr = (float**)buffer.getArrayOfWritePointers();
-    piano.process (ptr, buffer.getNumSamples(), midi);
+    // auto ptr = (float**)buffer.getArrayOfWritePointers();
+    std::span<float> leftBlock{ buffer.getWritePointer(0), static_cast<size_t>(buffer.getNumSamples()) };
+    std::span<float> rightBlock{ buffer.getWritePointer(1), static_cast<size_t>(buffer.getNumSamples()) };
+    piano.process (leftBlock, midi);
+    std::copy(leftBlock.begin(), leftBlock.end(), rightBlock.begin());
 }
 
 //==============================================================================

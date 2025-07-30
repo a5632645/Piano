@@ -162,6 +162,7 @@ target_compile_definitions (${PLUGIN_NAME} PRIVATE
 								JucePlugin_PreferredChannelConfigurations={0,2}
 								_CRT_SECURE_NO_WARNINGS
 							)
+set(TARGET ${PLUGIN_NAME} PRIVATE CMAKE_CXX_STANDARD 20)
 
 if (APPLE)
 	set_target_properties("juce_vst3_helper" PROPERTIES XCODE_ATTRIBUTE_CLANG_LINK_OBJC_RUNTIME NO)
