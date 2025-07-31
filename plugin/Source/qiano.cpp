@@ -717,24 +717,25 @@ Piano::~Piano()
 
 void Piano::process (std::span<float> block)
 {
-    for (size_t i = 0; i < block.size(); i++)
+    // the block is always zero because juce::AudioBuffer::clear called outside
+    for (size_t i = 0; i < numActiveVoices; ++i)
     {
-        float output = 0.0f;
-        for (size_t i = 0; i < numActiveVoices; ++i)
+        for (size_t j = 0; j < block.size(); ++j)
         {
-            output += voiceList[i]->goUp();
+            block[j] += voiceList[i]->goUp();
         }
-#if FDN_REVERB
-        block[i] = vals[pVolume] * soundboard->reverb(output);
+    }
+    for (size_t i = 0; i < block.size(); ++i)
+    {
+#ifdef FDN_REVERB
+        block[i] = vals[pVolume] * soundboard->reverb(block[i]);
 #else
-        out[i] =  vals[pVolume] * output;
-        input[i] =  vals[pVolume] * output;
+        block[i] *= vals[pVolume];
 #endif
     }
 
-
 #if !FDN_REVERB
-    soundboard->fft_conv(input.data(), out, samples);
+    soundboard->fft_conv(block.data(), out, block.size());
 #endif
 }
 
