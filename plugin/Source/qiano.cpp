@@ -185,7 +185,7 @@ float PianoNote::goDownDelayed()
 float PianoNote::go()
 {
     float output;
-    Value *v = piano->vals;
+    auto& v = piano->vals;
 
     float longForce = 0;
 
@@ -259,7 +259,7 @@ float PianoNote::go()
 
 vec4 PianoNote::go4()
 {
-    Value *v = piano->vals;
+    auto& v = piano->vals;
 
     if(!bInit4) {
         for(int k=0;k<nstrings;k++) {
@@ -461,8 +461,9 @@ bool PianoNote::isDone()
 void PianoNote::triggerOn (float velocity, float* tune)
 {
     triggerOn_ = true;
+    activeSampleAfterOff = 0;
     //logf("note = %d velocity =  %g\n",note,velocity);
-    Value *v = piano->vals;
+    auto& v = piano->vals;
     float f0 = 27.5; //A0 note 21
     float L = 0.14f + 1.4f / (1 + exp (-3.4f + 1.4f * log (f / f0)));
     L = 0.04f + 2.0f / (1.0f + exp (-3.2f + 1.4f * log (f / f0)));
@@ -677,7 +678,7 @@ void PianoNote::triggerOff()
     activeSampleAfterOff = 0;
     triggerOn_ = false;
 
-    Value *v = piano->vals;
+    auto& v = piano->vals;
     float gammaLDamped = v[pLongitudinalGammaDamped];
     float gammaL2Damped = v[pLongitudinalGammaQuadraticDamped];
 	
@@ -757,16 +758,17 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
             if (v->activeSampleAfterOff > maxSamples)
             {
                 v->deActivate();
-                std::swap(voiceList[i], voiceList[--numActiveVoices]);
                 --i;
+                std::swap(voiceList[i], voiceList[--numActiveVoices]);
+                DBG("STOP TIMEOUT");
             }
             v->activeSampleAfterOff += block.size();
         }
-        else if (v->isDone())
+        if (v->isDone())
         {
             v->deActivate();
-            std::swap(voiceList[i], voiceList[--numActiveVoices]);
             --i;
+            std::swap(voiceList[i], voiceList[--numActiveVoices]);
         }
     }
 
@@ -787,8 +789,9 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
             if (m.isNoteOn())
             {
                 if (! (noteArray[m.getNoteNumber()]->isActive()))
-                    // addVoice (v);
+                {
                     voiceList[numActiveVoices++] = v;
+                }
 
                 float velocity = vals[pMaxVelocity] * pow ((float)(m.getVelocity() / 127.0f), 2.0f);
                 v->triggerOn (velocity, nullptr);

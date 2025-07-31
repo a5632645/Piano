@@ -186,7 +186,7 @@ public:
 
 protected:     
     friend class PianoNote;
-    Value vals[NumParams];
+    std::array<Value, NumParams> vals;
     std::array<PianoNote*, NUM_NOTES> voiceList{};
     size_t numActiveVoices = 0;
     std::array<std::unique_ptr<PianoNote>, NUM_NOTES> noteArray;
