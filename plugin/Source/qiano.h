@@ -23,7 +23,6 @@ enum {
     MaxDecimation = 16,
     MaxLongDelay = 16,
     TranBufferSize = 32,
-    NumParams = 34
 };
 
 class Param
@@ -78,7 +77,9 @@ enum parameters {
     pBridgeSpring,
     pDwgs4,
     pDownsample,
-    pLongModes
+    pLongModes,
+    pMaxTime,
+    NumParams
 };
 
 int getParameterIndex(const char *key);
@@ -102,6 +103,8 @@ public:
     void deActivate();
 
     int note;
+    int activeSampleAfterOff{};
+    bool triggerOn_{};
     Piano* piano = nullptr;
 
     bool isDone();

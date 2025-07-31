@@ -350,7 +350,7 @@ void Piano::addVoice(PianoNote *v)
     //     v->prev = v;
     //     v->next = v;
     // }
-    voiceList[numActiveVoices++] = v;
+    // voiceList[numActiveVoices++] = v;
 }
 
 void Piano::removeVoice(PianoNote *v)
@@ -460,6 +460,7 @@ bool PianoNote::isDone()
 
 void PianoNote::triggerOn (float velocity, float* tune)
 {
+    triggerOn_ = true;
     //logf("note = %d velocity =  %g\n",note,velocity);
     Value *v = piano->vals;
     float f0 = 27.5; //A0 note 21
@@ -673,6 +674,9 @@ void PianoNote::triggerOn (float velocity, float* tune)
 
 void PianoNote::triggerOff()
 {
+    activeSampleAfterOff = 0;
+    triggerOn_ = false;
+
     Value *v = piano->vals;
     float gammaLDamped = v[pLongitudinalGammaDamped];
     float gammaL2Damped = v[pLongitudinalGammaQuadraticDamped];
@@ -738,20 +742,31 @@ void Piano::process (std::span<float> block)
 }
 
 void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
-{ 
+{
     int delta = 0;
-
+    float maxSamples = vals[pMaxTime] * Fs;
     for (size_t i = 0; i < numActiveVoices;)
     {
         PianoNote* v = voiceList[i];
-        if (v->isDone())
+        ++i;
+        if (!v->triggerOn_)
+        {
+            // force stop when a note continue too long
+            // the long force ends with a DC offset
+            // cause the energy condition can not stop the note
+            if (v->activeSampleAfterOff > maxSamples)
+            {
+                v->deActivate();
+                std::swap(voiceList[i], voiceList[--numActiveVoices]);
+                --i;
+            }
+            v->activeSampleAfterOff += block.size();
+        }
+        else if (v->isDone())
         {
             v->deActivate();
             std::swap(voiceList[i], voiceList[--numActiveVoices]);
-        }
-        else
-        {
-            ++i;
+            --i;
         }
     }
 
@@ -772,7 +787,8 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
             if (m.isNoteOn())
             {
                 if (! (noteArray[m.getNoteNumber()]->isActive()))
-                    addVoice (v);
+                    // addVoice (v);
+                    voiceList[numActiveVoices++] = v;
 
                 float velocity = vals[pMaxVelocity] * pow ((float)(m.getVelocity() / 127.0f), 2.0f);
                 v->triggerOn (velocity, nullptr);
@@ -930,6 +946,10 @@ void Piano::setParameter (int32_t index, float value)
             break;
         case pLongModes:
             p.v = 1 + lrintf(value);
+            break;
+        case pMaxTime:
+            // seconds
+            p.v = std::lerp(3.0f, 10.0f, value);
             break;
     }
 }
