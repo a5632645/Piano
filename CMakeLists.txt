@@ -161,6 +161,7 @@ target_compile_definitions (${PLUGIN_NAME} PRIVATE
 								DONT_SET_USING_JUCE_NAMESPACE=1
 								JucePlugin_PreferredChannelConfigurations={0,2}
 								_CRT_SECURE_NO_WARNINGS
+								JUCE_FORCE_USE_LEGACY_PARAM_IDS
 							)
 set(TARGET ${PLUGIN_NAME} PRIVATE CMAKE_CXX_STANDARD 20)
 
