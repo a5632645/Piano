@@ -765,7 +765,7 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
 
         size_t nextDelta = static_cast<size_t>(m.getTimeStamp());
         nextDelta = std::min (nextDelta, block.size());
-        process (block.subspan(delta));
+        process (block.subspan(delta, nextDelta - delta));
 
         if (m.getNoteNumber() >= PIANO_MIN_NOTE && m.getNoteNumber() <= PIANO_MAX_NOTE)
         {
