@@ -249,9 +249,9 @@ float PianoNote::go()
 
     //cout << output << "\n";
     float delayed = outputdelay.goDelay(output);
-    // energy = energy + output*output - delayed*delayed;
-    // if(energy>maxEnergy)
-    //     maxEnergy = energy;
+    energy = energy + output*output - delayed*delayed;
+    if(energy>maxEnergy)
+        maxEnergy = energy;
 
     tTranRead = (tTranRead + 1)%TranBufferSize;
 
