@@ -148,8 +148,10 @@ float PianoNote::goDownDelayed()
         // if(piano->USE_DWGS4 && hammer->isEscaped())
         if(piano->USE_DWGS4 && hammer.isEscaped())
         {
-            *((vec4*)in) = go4();
-            *((vec4*)(in+4)) = go4();
+            vec4 out4 = go4();
+            simde_mm_store_ps(in, out4);
+            out4 = go4();
+            simde_mm_store_ps(in + 4, out4);
         }
         else
         {
