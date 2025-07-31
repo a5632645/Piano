@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstddef>
 #include <math.h>
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include "reverb.h"
@@ -397,6 +398,40 @@ void Piano::init (float Fs_, int blockSize_)
 #else
     soundboard = std::make_unique<ConvolveReverb<revSize>>(blockSize);
 #endif
+
+    for (int i = 0; auto& t : threadDatas_)
+    {
+        t->quit = true;
+        t->waiter.release();
+        if (t->thread)
+        {
+            t->thread->join();
+        }
+        t->quit = false;
+        t->buffer.resize(blockSize);
+        t->size = 0;
+        t->complete = false;
+        t->thread = std::make_unique<std::jthread>(
+            [this, &data = threadDatas_[i++]] {
+                while (!data->quit)
+                {
+                    data->waiter.acquire();
+                    std::fill_n(data->buffer.begin(), data->size, 0.0f);
+                    int idx = threadVoiceIndex_.fetch_sub(1);
+                    while (idx > 0)
+                    {
+                        PianoNote* note = voiceList[idx - 1];
+                        for (size_t i = 0; i < data->size; ++i)
+                        {
+                            data->buffer[i] += note->goUp();
+                        }
+                        idx = threadVoiceIndex_.fetch_sub(1);
+                    }
+                    data->complete = true;
+                }
+            }
+        );
+    }
 }
 
 Piano::Piano()
@@ -406,6 +441,11 @@ Piano::Piano()
 
     // input = nullptr;
     soundboard = nullptr;
+
+    for (auto& t : threadDatas_)
+    {
+        t = std::make_unique<ThreadData>();
+    }
 }
 
 PianoNote::PianoNote (int note_, int Fs_, Piano* piano_)
@@ -716,18 +756,51 @@ Piano::~Piano()
 
     // delete input;
     // delete soundboard;
+    for (auto& t : threadDatas_)
+    {
+        t->quit = true;
+        t->waiter.release();
+        t->thread->join();
+    }
 }
+
 
 void Piano::process (std::span<float> block)
 {
     // the block is always zero because juce::AudioBuffer::clear called outside
-    for (size_t i = 0; i < numActiveVoices; ++i)
+    threadVoiceIndex_ = numActiveVoices;
+    for (auto& t : threadDatas_)
     {
-        for (size_t j = 0; j < block.size(); ++j)
+        t->size = block.size();
+        t->complete = false;
+        t->waiter.release();
+    }
+    int idx = threadVoiceIndex_.fetch_sub(1);
+    while (idx > 0)
+    {
+        PianoNote* note = voiceList[idx - 1];
+        for (size_t i = 0; i < block.size(); ++i)
         {
-            block[j] += voiceList[i]->goUp();
+            block[i] += note->goUp();
+        }
+        idx = threadVoiceIndex_.fetch_sub(1);
+    }
+    for (auto& t : threadDatas_)
+    {
+        while (!t->complete) {}
+        for (size_t i = 0; i < block.size(); ++i)
+        {
+            block[i] += t->buffer[i];
         }
     }
+    // for (size_t i = 0; i < numActiveVoices; ++i)
+    // {
+    //     for (size_t j = 0; j < block.size(); ++j)
+    //     {
+    //         block[j] += voiceList[i]->goUp();
+    //     }
+    // }
+
     for (size_t i = 0; i < block.size(); ++i)
     {
 #ifdef FDN_REVERB
@@ -760,7 +833,6 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
                 v->deActivate();
                 --i;
                 std::swap(voiceList[i], voiceList[--numActiveVoices]);
-                DBG("STOP TIMEOUT");
             }
             v->activeSampleAfterOff += block.size();
         }
