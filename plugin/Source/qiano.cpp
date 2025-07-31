@@ -154,12 +154,10 @@ float PianoNote::goDownDelayed()
             simde_mm_store_ps(in, vec);
             vec = go4();
             simde_mm_store_ps(in + 4, vec);
-            // *((vec4*)in) = go4();
-            // *((vec4*)(in+4)) = go4();
         }
         else
         {
-            for(int i=0; i<8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 in[i] = go();
             }
@@ -250,9 +248,9 @@ float PianoNote::go()
 
     //cout << output << "\n";
     float delayed = outputdelay.goDelay(output);
-    // energy = energy + output*output - delayed*delayed;
-    // if(energy>maxEnergy)
-    //     maxEnergy = energy;
+    energy = energy + output*output - delayed*delayed;
+    if(energy>maxEnergy)
+        maxEnergy = energy;
 
     tTranRead = (tTranRead + 1) % TranBufferSize;
 
