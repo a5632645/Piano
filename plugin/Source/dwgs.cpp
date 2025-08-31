@@ -271,13 +271,13 @@ void dwgs::set(float Fs, int longmodes, int downsample, int upsample, float f, f
 
     //logf("%d %d %d %d %g %g\n", del0, del1, del2, del3, delta, delta2);
 
-    posix_memalign ((void**)&wave0, 32, size_t (delTab + 8) * sizeof(float));
-    posix_memalign ((void**)&wave1, 32, size_t (delTab + 8) * sizeof(float));
-    posix_memalign ((void**)&wave, 32, size_t (delTab + 8) * sizeof(float));
-    posix_memalign ((void**)&Fl, 32, size_t (delTab + 8) * sizeof(float));
-    memset (wave0, 0, size_t (delTab + 8) * sizeof(float));
-    memset (wave1, 0, size_t(delTab + 8) * sizeof(float));
-    memset (Fl, 0, size_t (delTab + 8) * sizeof(float));
+    posix_memalign ((void**)&wave0, 32, size_t (delTab + 32) * sizeof(float));
+    posix_memalign ((void**)&wave1, 32, size_t (delTab + 32) * sizeof(float));
+    posix_memalign ((void**)&wave, 32, size_t (delTab + 32) * sizeof(float));
+    posix_memalign ((void**)&Fl, 32, size_t (delTab + 32) * sizeof(float));
+    memset (wave0, 0, size_t (delTab + 32) * sizeof(float));
+    memset (wave1, 0, size_t(delTab + 32) * sizeof(float));
+    memset (Fl, 0, size_t (delTab + 32) * sizeof(float));
 
     //logf("dwgs top %d %d %d %d %g %g %g %g %g %g %g %g\n",del0,del1,del2,del3,dHammer+1+del2+dTop,del1+del3+dDispersion+lowpassdelay+dBottom, dTop, dBottom, dHammer, inpos*deltot, lowpassdelay, dDispersion);
 
