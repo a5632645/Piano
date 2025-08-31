@@ -117,6 +117,8 @@ static float userValue (int32_t index, float value)
 PianoAudioProcessor::PianoAudioProcessor()
     : gin::Processor (false, gin::ProcessorOptions().withAdditionalCredits({"Clayton Otey"}))
 {
+	setLatencySamples (interalBlockSize);
+	
     auto textFunction = [this] (const gin::Parameter& p, float v)
     {
         int idx = params.indexOf (&p);
@@ -185,6 +187,12 @@ void PianoAudioProcessor::prepareToPlay (double newSampleRate, int newSamplesPer
     Processor::prepareToPlay (newSampleRate, newSamplesPerBlock);
 
     piano.init (float (newSampleRate), newSamplesPerBlock);
+	
+	fifoIn.setSize (2, newSamplesPerBlock * 2 + interalBlockSize);
+	fifoOut.setSize (2, newSamplesPerBlock * 2 + interalBlockSize);
+	
+	fifoOut.clear();
+	fifoOut.writeSilence (interalBlockSize);
 }
 
 void PianoAudioProcessor::releaseResources()
@@ -203,9 +211,23 @@ void PianoAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
     int idx = 0;
     for (auto p : params)
         piano.setParameter (idx++, p->getValue());
+	
+	fifoIn.write (buffer, midi);
+	
+	while (fifoIn.getNumSamplesAvailable() >= interalBlockSize)
+	{
+		juce::MidiBuffer workMidi;
+		fifoIn.read (workBuffer, workMidi);
 
-    auto ptr = (float**)buffer.getArrayOfWritePointers();
-    piano.process (ptr, buffer.getNumSamples(), midi);
+		auto ptr = (float**)workBuffer.getArrayOfWritePointers();
+		piano.process (ptr, workBuffer.getNumSamples(), workMidi);
+		
+		fifoOut.write (workBuffer, workMidi);
+	}
+	
+	// write the output
+	midi.clear();
+	fifoOut.read (buffer, midi);
 }
 
 //==============================================================================
