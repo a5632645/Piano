@@ -317,83 +317,29 @@ vec4 PianoNote::go4()
     vec4 output = simde_mm_add_ps (simde_mm_mul_ps (s1, simde_mm_broadcast_ss(&tranBridgeForce)), simde_mm_mul_ps (s2, simde_mm_broadcast_ss (&longMix)));
 
     vec4 delayed = outputdelay.goDelay4(output);
-    /* the output and delayed finnally stuck at -12.xxx values in default parameters
-     * this cause the energy calculation can not stop a note
-     * this cause bool PianoNote::isDone() always return false
-     * finnally, too many PianoNote instances cause cpu heavry
-    */
     energy = energy + sum4 (simde_mm_sub_ps (simde_mm_mul_ps (output, output), simde_mm_mul_ps (delayed, delayed)));
     if(energy>maxEnergy)
         maxEnergy = energy;
-    // lastOutput_ = currentOutput_;
-    // vec4 sum = simde_mm_hadd_ps(output, output);
-    // vec4 sum2 = simde_mm_hadd_ps(sum, sum);
-    // currentOutput_ = simde_mm_cvtss_f32(sum2);
-
 
     tTranRead = (tTranRead + 4)%TranBufferSize;
 
     return output;
 }
 
-void Piano::addVoice(PianoNote *v)
-{ 
-    // if(voiceList)
-	// {
-    //     v->next = voiceList;
-    //     v->prev = voiceList->prev;
-    //     voiceList->prev->next = v;
-    //     voiceList->prev = v;
-    // }
-	// else
-	// {
-    //     voiceList = v;
-    //     v->prev = v;
-    //     v->next = v;
-    // }
-    // voiceList[numActiveVoices++] = v;
-}
-
-void Piano::removeVoice(PianoNote *v)
-{	
-    // if (v == voiceList)
-    // {
-    //     if(v == v->next)
-    //         voiceList = nullptr;
-    //     else
-    //         voiceList = v->next;
-    // }
-    // PianoNote *p = v->prev;
-    // PianoNote *n = v->next;
-    // p->next = n;
-    // n->prev = p;
-}
-
 void Piano::init (float Fs_, int blockSize_)
 {
     Fs = Fs_;
     blockSize = blockSize_;
-    // voiceList = nullptr;
     PianoNote::fillFrequencyTable();
 
     for (int k = PIANO_MIN_NOTE; k <= PIANO_MAX_NOTE; k++)
     {
-        // if(noteArray[k]) delete noteArray[k];
-        // noteArray[k] = new PianoNote(k, int (Fs), this);
         noteArray[k] = std::make_unique<PianoNote>(k, int (Fs), this);
     }
 
-    // if (input)
-    //     delete input;
-
-    // input = new float[size_t (blockSize)];
     input.resize(blockSize);
 
-    // if (soundboard)
-    //     delete soundboard;
-
 #if FDN_REVERB
-    // soundboard = new Reverb (Fs);
     soundboard = std::make_unique<Reverb>(Fs);
 #else
     soundboard = std::make_unique<ConvolveReverb<revSize>>(blockSize);
@@ -465,13 +411,6 @@ PianoNote::PianoNote (int note_, int Fs_, Piano* piano_)
     //nstrings = 1;
     nstringsi = 1.0f / (float)nstrings;
 
-    // for (int k = 0; k < nstrings; k++)
-    // {
-    //     stringT[k] = new dwgs();
-    //     stringHT[k] = new dwgs();
-    // }
-    // hammer = new Hammer();
-
     outputdelay.setDelay(Fs);
 
     longDelay = 8;
@@ -490,12 +429,6 @@ bool PianoNote::isDone()
     float e = maxEnergy * 1e-8f;
     return energy < e;
     return (energy < 1e-8 * maxEnergy);
-
-    /* too small variation, seen as slience */
-    /* this value will cut the note at almost -60dB */
-    // bool done = std::abs(lastOutput_ - currentOutput_) < 1e-1f;
-    // done |= std::isnan(lastOutput_);
-    // return done;
 }
 
 void PianoNote::triggerOn (float velocity, float* tune)
@@ -678,8 +611,6 @@ void PianoNote::triggerOn (float velocity, float* tune)
     hammer.strike(velocity);
     maxEnergy = 0.0;
     energy = 0.0;
-    // lastOutput_ = 0.0f;
-    // currentOutput_ = 0.0f;
 
 
     tranBridgeForce = Z;
@@ -741,21 +672,10 @@ bool PianoNote::isActive()
 
 PianoNote::~PianoNote()
 {
-    // for (int k=0;k<nstrings;k++)
-    // {
-    //     delete stringT[k];
-    //     delete stringHT[k];
-    // }
-    // delete hammer;
 }
 
 Piano::~Piano()
 {
-    // for (int k = PIANO_MIN_NOTE; k <= PIANO_MAX_NOTE; k++)
-    //     delete noteArray[k];
-
-    // delete input;
-    // delete soundboard;
     for (auto& t : threadDatas_)
     {
         t->quit = true;
@@ -793,13 +713,6 @@ void Piano::process (std::span<float> block)
             block[i] += t->buffer[i];
         }
     }
-    // for (size_t i = 0; i < numActiveVoices; ++i)
-    // {
-    //     for (size_t j = 0; j < block.size(); ++j)
-    //     {
-    //         block[j] += voiceList[i]->goUp();
-    //     }
-    // }
 
     for (size_t i = 0; i < block.size(); ++i)
     {
@@ -883,7 +796,6 @@ void Piano::process (std::span<float> block, juce::MidiBuffer& midi)
 void Piano::triggerOn (int note, float velocity, float* tune)
 {
     PianoNote* v = noteArray[note].get();
-    addVoice (v);
     v->triggerOn (velocity,tune);
 }
 

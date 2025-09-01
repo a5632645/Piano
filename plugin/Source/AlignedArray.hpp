@@ -12,7 +12,7 @@ public:
     }
     void Free() {
         if (ptr_) {
-#ifdef _WINDOWS
+#ifdef _WIN32
             _aligned_free(ptr_);
 #else
             free(ptr_);
@@ -24,7 +24,7 @@ public:
 
     void Reset(size_t size) {
         Free();
-#ifdef _WINDOWS
+#ifdef _WIN32
         ptr_ = (T*)_aligned_malloc(size * sizeof(T), aligenment);
         if (!ptr_) assert(false);
 #else

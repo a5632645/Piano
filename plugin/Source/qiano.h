@@ -172,8 +172,6 @@ public:
     Piano();
     ~Piano();
 
-    void addVoice (PianoNote *v);
-    void removeVoice (PianoNote *v);
     void process (std::span<float> block);
     void process (std::span<float> block, juce::MidiBuffer&);
     void init (float Fs, int blockSize);
