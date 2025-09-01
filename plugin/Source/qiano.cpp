@@ -341,6 +341,7 @@ void Piano::init (float Fs_, int blockSize_)
 
 #if FDN_REVERB
     soundboard = std::make_unique<Reverb>(Fs);
+    soundboard->set (vals[pSoundboardSize], vals[pSoundboardDecay], vals[pSoundboardLopass]);
 #else
     soundboard = std::make_unique<ConvolveReverb<revSize>>(blockSize);
 #endif

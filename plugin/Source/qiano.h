@@ -40,8 +40,8 @@ public:
     operator float() const {
         return v;
     }
-    float f;
-    float v;
+    float f{};
+    float v{};
 };
 
 enum parameters {
